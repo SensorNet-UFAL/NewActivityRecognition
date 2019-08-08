@@ -2,7 +2,7 @@
 from utils.debug import Debug
 import random
 
-class Processing_DB_Files:
+class Processing_DB_Files(object):
     
     #Loading data with windows by people
     def load_training_data_by_window_by_people(self, dataset, filename, tablename, features, label,window_len, person_tag, person_column, additional_where = ""):
