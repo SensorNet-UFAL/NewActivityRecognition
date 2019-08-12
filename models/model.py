@@ -64,20 +64,21 @@ class Model(object):
         #Initialzing the list of test and training
     
         Debug.print_debug("Initializing the sets of training and test...")
-        training_list = dataset.copy()
+        training_list_aux = dataset.copy()
         test_list = []
     
         #List with test indexes to put in test list
         Debug.print_debug("Calculating the random indexes...")
         random.seed(seed)
-        test_index = random.sample(range(len(training_list)), test_len)
+        test_index = random.sample(range(len(dataset)), test_len)
         #test_index = random.sample(range(training_len), test_len)
     
         Debug.print_debug("Loop for create the sets of training e test...")
-        for index in test_index:
+        for index in test_index:            
             test_list.append(dataset[index])
-            training_list.pop(index)
-    
+            training_list_aux[index] = pd.DataFrame()
+        
+        training_list = list(filter(lambda a: not a.empty, training_list_aux))
         Debug.print_debug("List len: {}".format(len(dataset)))
         Debug.print_debug("Training len: {}".format(len(training_list)))
         Debug.print_debug("Test len: {}".format(len(test_list)))
