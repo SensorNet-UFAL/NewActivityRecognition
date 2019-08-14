@@ -15,9 +15,9 @@ class Processing_DB_Files(object):
         
     def calculating_features(self, model:Model):
 
-        training = self.calculating_features_raw(model.training, model.label_tag, model.features[0], model.features[1], model.features[2])
-        test = self.calculating_features_raw(model.test, model.label_tag, model.features[0], model.features[1], model.features[2])
-        return training, test
+        training, training_labels = self.calculating_features_raw(model.training, model.label_tag, model.features[0], model.features[1], model.features[2])
+        test, test_labels = self.calculating_features_raw(model.test, model.label_tag, model.features[0], model.features[1], model.features[2])
+        return training, training_labels, test, test_labels
         
     def normalization(self, dataset):
         dataset_n = []
@@ -174,7 +174,7 @@ class Processing_DB_Files(object):
                 y_z.append(round(self.get_correlation(y, z), 3))
     
                 # GET LABEL #
-                label = d[label_tag].iloc[0]
+                label = d[label_tag].iloc[0][0]
                 label_list.append(label) #Get label for d
             else:
                 discart = discart + 1
