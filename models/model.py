@@ -23,9 +23,9 @@ class Model(object):
         Debug.print_debug(self.file_path)
         dataset = sqlite3.connect(self.file_path)
         if len(additional_where) > 0:
-            to_return = self.get_data_sql_query("select {} from {} where {} = {} {}".format(', '.join(self.features), self.table_name, self.person_column, person_tag, additional_where), dataset)
+            to_return = self.get_data_sql_query("select {} from {} where {} like {} {}".format(', '.join(self.features), self.table_name, self.person_column, person_tag, additional_where), dataset)
         else:
-            to_return = self.get_data_sql_query("select {} from {} where {} = '{}'".format(', '.join(self.features), self.table_name, self.person_column, person_tag), dataset)
+            to_return = self.get_data_sql_query("select {} from {} where {} like '{}'".format(', '.join(self.features), self.table_name, self.person_column, person_tag), dataset)
         self.data = to_return
         return to_return
 

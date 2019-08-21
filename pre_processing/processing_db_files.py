@@ -7,6 +7,7 @@ from numpy import trapz
 from scipy.stats import kurtosis
 from scipy.stats import skew
 from scipy.stats.stats import pearsonr
+import pandas as pd
 
 class Processing_DB_Files(object):
     
@@ -185,9 +186,15 @@ class Processing_DB_Files(object):
                                           x_minmax, y_minmax, z_minmax, x_mean, y_mean, z_mean,
                                           x_std, y_std, z_std, x_kurtosis, y_kurtosis, z_kurtosis,
                                           x_y, x_z, y_z])
+        features = pd.DataFrame(features)
+        features.columns = ["x_integration","y_integration","z_integration","x_rms","y_rms","z_rms","x_minmax","y_minmax","z_minmax","x_mean","y_mean","z_mean","x_std","y_std","z_std","x_kurtosis","y_kurtosis","z_kurtosis", "x_y", "x_z", "y_z"]
         print("Features Shape: {}".format(features.shape))
         #Initializing labels array
         labels = np.array(label_list)
+        labels = np.reshape(labels, (labels.shape[0],1))
+        print("Labels Shape: {}".format(labels.shape))
+        labels = pd.DataFrame(labels)
+        labels.columns = ["activity"]
         #labels = np.reshape(labels, (labels.shape[0],n1
         # 1))
         return features, labels
