@@ -3,6 +3,7 @@ from utils.debug import Debug
 from utils.project import Project
 import sqlite3
 import pandas as pd
+import numpy as np
 import random
 
 class Model(object):
@@ -10,7 +11,7 @@ class Model(object):
     file_path = ""
     table_name = ""
     person_column = "person"
-    features = ["x", "y", "z", "activity"]
+    features = ["x", "y", "z", "person", "activity"]
     label_tag = ["activity"]
     person_column = "person"
     training, test, data = pd.DataFrame(), pd.DataFrame(), pd.DataFrame()    
@@ -37,7 +38,19 @@ class Model(object):
         list_raw_data = self.get_all_readings_from_person(person_tag, additional_where)
         list_window = self.slice_by_window(list_raw_data, window_len)
         self.training, self.test = self.slice_to_training_test(list_window, training_proportion, seed)
-    
+    #Loading data with windows by people
+    def load_training_data_by_people(self, person_tag):
+        list_raw_data = self.get_all_readings_from_person(person_tag)
+        return list_raw_data
+    #Loading data from all people
+    def load_training_data_from_all_people(self):
+        dataset = sqlite3.connect(self.file_path)
+        peoples = self.get_data_sql_query("select distinct {} from {}".format(self.person_column, self.table_name), dataset)
+        list_of_peoples_data = {}
+        for p in peoples[self.person_column]:
+            list_of_peoples_data[p] = self.load_training_data_by_people(p)
+            
+        return list_of_peoples_data
     
     def slice_by_window(self, dataframe, window_length):
         index = 0
