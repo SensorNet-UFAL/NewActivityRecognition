@@ -11,8 +11,8 @@ class Model(object):
     file_path = ""
     table_name = ""
     person_column = "person"
-    features = ["x", "y", "z", "person", "activity"]
-    label_tag = ["activity"]
+    features = ["x", "y", "z", "activity"]
+    label_tag = "activity"
     person_column = "person"
     training, test, data = pd.DataFrame(), pd.DataFrame(), pd.DataFrame()    
     
@@ -21,7 +21,7 @@ class Model(object):
         self.table_name = table_name
 
     def get_all_readings_from_person(self, person_tag, additional_where = ""):
-        Debug.print_debug(self.file_path)
+        #Debug.print_debug(self.file_path)
         dataset = sqlite3.connect(self.file_path)
         if len(additional_where) > 0:
             to_return = self.get_data_sql_query("select {} from {} where {} like {} {}".format(', '.join(self.features), self.table_name, self.person_column, person_tag, additional_where), dataset)
@@ -29,6 +29,11 @@ class Model(object):
             to_return = self.get_data_sql_query("select {} from {} where {} like '{}'".format(', '.join(self.features), self.table_name, self.person_column, person_tag), dataset)
         self.data = to_return
         return to_return
+    
+    def get_labels_to_person(self, person):
+        dataset = sqlite3.connect(self.file_path)
+        to_return = self.get_data_sql_query("SELECT DISTINCT {} from {} where person like '{}'".format(self.label_tag, self.table_name, person), dataset)
+        return to_return[self.label_tag]
 
     def get_data_sql_query(self, query,dataset):
         return pd.read_sql_query(query, dataset)    
@@ -43,12 +48,15 @@ class Model(object):
         list_raw_data = self.get_all_readings_from_person(person_tag)
         return list_raw_data
     #Loading data from all people
-    def load_training_data_from_all_people(self):
+    def load_training_data_from_all_people(self, window_len, training_proportion=0.8, seed=1):
         dataset = sqlite3.connect(self.file_path)
         peoples = self.get_data_sql_query("select distinct {} from {}".format(self.person_column, self.table_name), dataset)
         list_of_peoples_data = {}
         for p in peoples[self.person_column]:
-            list_of_peoples_data[p] = self.load_training_data_by_people(p)
+            aux = self.slice_by_window(self.load_training_data_by_people(p), window_len)
+            training_test = {}
+            training_test['training'], training_test['test'] = self.slice_to_training_test(aux, training_proportion, seed)
+            list_of_peoples_data[p] = training_test
             
         return list_of_peoples_data
     

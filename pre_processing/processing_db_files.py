@@ -19,7 +19,19 @@ class Processing_DB_Files(object):
         training, training_labels = self.calculating_features_raw(model.training, model.label_tag, model.features[0], model.features[1], model.features[2])
         test, test_labels = self.calculating_features_raw(model.test, model.label_tag, model.features[0], model.features[1], model.features[2])
         return training, training_labels, test, test_labels
-        
+    
+    def calculating_features_to_each_person(self, data_from_each_person, model:Model):
+        list_of_peoples_data = {}
+        for p in data_from_each_person:
+            features_training = {}
+            features_test = {}
+            features_training["training_features"], features_training["training_labels"] = self.calculating_features_raw(data_from_each_person[p]["training"], model.label_tag, model.features[0], model.features[1], model.features[2])
+            features_test["test_features"], features_test["test_labels"] = self.calculating_features_raw(data_from_each_person[p]["test"], model.label_tag, model.features[0], model.features[1], model.features[2])
+            training_test = {}
+            training_test['training'], training_test['test'] = features_training, features_test
+            list_of_peoples_data[p] = training_test
+        return list_of_peoples_data
+    
     def normalization(self, dataset):
         dataset_n = []
         mx = max(dataset)
@@ -175,7 +187,7 @@ class Processing_DB_Files(object):
                 y_z.append(round(self.get_correlation(y, z), 3))
     
                 # GET LABEL #
-                label = d[label_tag].iloc[0][0]
+                label = d[label_tag].iloc[0]
                 label_list.append(label) #Get label for d
             else:
                 discart = discart + 1

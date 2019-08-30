@@ -2,28 +2,26 @@
 # IMPORTS #
 from utils.debug import Debug
 from sklearn.ensemble import ExtraTreesClassifier # Extra Trees
-from pre_processing.processing_db_files import Processing_DB_Files
 from models.hmp_model import HMP_Model
+from classifiers.base_classification import Base_Classification
+import pandas as pd
 
 
 
 
 
 #===INITIALIZATION===#
-Debug.DEBUG = 1
+Debug.DEBUG = 0
 hmp = HMP_Model()
-extra_trees = ExtraTreesClassifier(n_estimators = 1, max_depth=10, random_state=0)
-#hmp.load_training_data_by_window_by_people("f1", 50)
-#processing = Processing_DB_Files()
-p = hmp.load_training_data_from_all_people()
+extra_trees = ExtraTreesClassifier(n_estimators = 100, max_depth=100, random_state=0)
+base_classification = Base_Classification(hmp, extra_trees)
+proba, pred, dataset = base_classification.predict_with_proba(50, 50)
+pred = pd.DataFrame(pred, columns=["Activity"])
+c = dataset["test"]["test_labels"].activity.unique()
+r = pd.DataFrame(proba, columns = extra_trees.classes_)
+#best_accuracy = base_classification.find_best_window(range(10, 101, 50))  
 
 
-#===PROCESSING===#
-training, training_labels, test, test_labels = processing.calculating_features(hmp)
-extra_trees.fit(training, training_labels)
-pred_p = extra_trees.predict_proba(test)
-pred_l_p = extra_trees.predict_log_proba(test)
-print("Accuracy: {}".format(extra_trees.score(test, test_labels)))
 
 #PLOT TREE IN FILE
 '''
