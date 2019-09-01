@@ -32,8 +32,9 @@ class Base_Classification(object):
     def predict_with_proba(self, window, threshold):
         data_all_people = self.model.load_training_data_from_all_people(window)
         features_all_people = self.processing.calculating_features_to_each_person(data_all_people, self.model)
-        return self.get_accuracy.simple_accuracy_mean_to_each_person_with_proba(features_all_people, self.model, self.clf, threshold)
-    
+        accuracies_proba = self.get_accuracy.simple_accuracy_mean_to_each_person_with_proba(features_all_people, self.model, self.clf, threshold)
+        accuracies = self.get_accuracy.simple_accuracy_mean_to_each_person(features_all_people, self.model, self.clf)
+        return accuracies, accuracies_proba
     
     
     

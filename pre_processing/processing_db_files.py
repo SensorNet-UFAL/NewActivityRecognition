@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #from utils.debug import Debug
 from models.model import Model
+from utils.debug import Debug
 import numpy as np
 import math
 from numpy import trapz
@@ -108,7 +109,7 @@ class Processing_DB_Files(object):
         x_y, x_z, y_z = [], [], []
     
         for d in dataframe_list:
-            #print(d[label_name])
+            #Debug.print_debug(d[label_name])
             if len(np.unique(d[label_tag])) < 2:
                 x = d.loc[:, x_label]
                 y = d.loc[:, y_label]
@@ -192,7 +193,7 @@ class Processing_DB_Files(object):
             else:
                 discart = discart + 1
     
-        print("Total of discarded windows: {}".format(discart))
+        Debug.print_debug("Total of discarded windows: {}".format(discart))
         #Initializing features array
         features = self.create_array_features([x_integration, y_integration, z_integration, x_rms, y_rms, z_rms,
                                           x_minmax, y_minmax, z_minmax, x_mean, y_mean, z_mean,
@@ -200,11 +201,11 @@ class Processing_DB_Files(object):
                                           x_y, x_z, y_z])
         features = pd.DataFrame(features)
         features.columns = ["x_integration","y_integration","z_integration","x_rms","y_rms","z_rms","x_minmax","y_minmax","z_minmax","x_mean","y_mean","z_mean","x_std","y_std","z_std","x_kurtosis","y_kurtosis","z_kurtosis", "x_y", "x_z", "y_z"]
-        print("Features Shape: {}".format(features.shape))
+        Debug.print_debug("Features Shape: {}".format(features.shape))
         #Initializing labels array
         labels = np.array(label_list)
         labels = np.reshape(labels, (labels.shape[0],1))
-        print("Labels Shape: {}".format(labels.shape))
+        Debug.print_debug("Labels Shape: {}".format(labels.shape))
         labels = pd.DataFrame(labels)
         labels.columns = ["activity"]
         #labels = np.reshape(labels, (labels.shape[0],n1

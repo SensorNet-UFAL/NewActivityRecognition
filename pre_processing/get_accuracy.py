@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from models.model import Model
+import pandas as pd
 
 
 class Get_Accuracy(object):
@@ -15,14 +16,43 @@ class Get_Accuracy(object):
         return accuracies
     def simple_accuracy_mean_to_each_person_with_proba(self, data_from_each_person, model:Model, clf, threshold):
         accuracies = {}
+        valid_data_from_each_person = {}
         for p in data_from_each_person:
-            clf.classes_ = data_from_each_person[p]["test"]["test_labels"].activity.unique()
-            clf.fit(data_from_each_person[p]['training']['training_features'], data_from_each_person[p]['training']['training_labels'])
-            pred = clf.predict_proba(data_from_each_person[p]['test']['test_features'])
-            pred2 = clf.predict(data_from_each_person[p]['test']['test_features'])
+            #Get data of person
+            person_data = data_from_each_person[p]
+            #Getting unique labels to the data
+            clf.classes_ = person_data["test"]["test_labels"].activity.unique()
+            #Fit model
+            clf.fit(person_data['training']['training_features'], person_data['training']['training_labels'])
+            #Getting the probability table
+            pred = clf.predict_proba(person_data['test']['test_features'])
+            pred = pd.DataFrame(pred, columns = clf.classes_)
+            #Filtering data with probability greater than the threshold
+            valid_indexes = self.get_indexes_with_valid_predictions(pred, threshold)
+            valid_data_from_each_person[p] = {"training":{}, "test":{}}
+            valid_data_from_each_person[p]["training"]["training_features"] = person_data['training']['training_features'].iloc[valid_indexes,:]
+            valid_data_from_each_person[p]["training"]["training_labels"] = person_data['training']['training_labels'].iloc[valid_indexes,:]
+            valid_data_from_each_person[p]["test"]["test_features"] = person_data['test']['test_features'].iloc[valid_indexes,:]
+            valid_data_from_each_person[p]["test"]["test_labels"] = person_data['test']['test_labels'].iloc[valid_indexes,:]
+            
+            #clf.fit(valid_data_from_each_person[p]['training']['training_features'], valid_data_from_each_person[p]['training']['training_labels'])
+            accuracies[p] = clf.score(valid_data_from_each_person[p]['test']['test_features'], valid_data_from_each_person[p]['test']['test_labels'])
+            
+            '''
+            # OLD
+            pred2 = clf.predict(person_data['test']['test_features'])
             print("PERSON => {}".format(p))
-            return pred, pred2, data_from_each_person[p]
+            return pred, pred2, person_data, valid_data_from_each_person
+            '''
         return accuracies
-        
-        
+    
+    def get_indexes_with_valid_predictions(self, dataframe_predicions:pd.DataFrame, threshold):
+        return_indexes = []
+        for index, row in dataframe_predicions.iterrows():
+            for i, value in enumerate(row):
+                if value > threshold:
+                    return_indexes.append(index)
+                    break
+        return return_indexes
+            
 

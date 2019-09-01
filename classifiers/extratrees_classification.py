@@ -4,7 +4,6 @@ from utils.debug import Debug
 from sklearn.ensemble import ExtraTreesClassifier # Extra Trees
 from models.hmp_model import HMP_Model
 from classifiers.base_classification import Base_Classification
-import pandas as pd
 
 
 
@@ -13,12 +12,12 @@ import pandas as pd
 #===INITIALIZATION===#
 Debug.DEBUG = 0
 hmp = HMP_Model()
-extra_trees = ExtraTreesClassifier(n_estimators = 100, max_depth=100, random_state=0)
+extra_trees = ExtraTreesClassifier(n_estimators = 10000, max_depth=1000, random_state=0)
 base_classification = Base_Classification(hmp, extra_trees)
-proba, pred, dataset = base_classification.predict_with_proba(50, 50)
-pred = pd.DataFrame(pred, columns=["Activity"])
-c = dataset["test"]["test_labels"].activity.unique()
-r = pd.DataFrame(proba, columns = extra_trees.classes_)
+#proba, pred, dataset, select_valid_prediction = base_classification.predict_with_proba(50, 0.45)
+accuracies, accuracies_proba = base_classification.predict_with_proba(50, 0.55)
+
+#pred = pd.DataFrame(pred, columns=["Activity"])
 #best_accuracy = base_classification.find_best_window(range(10, 101, 50))  
 
 
