@@ -47,6 +47,17 @@ class Model(object):
     def load_training_data_by_people(self, person_tag):
         list_raw_data = self.get_all_readings_from_person(person_tag)
         return list_raw_data
+    
+    #Loading data from list of people
+    def load_training_data_from_list_people(self, window_len, list_people, training_proportion=0.8, seed=1):
+        list_of_peoples_data = {}
+        for p in list_people:
+            aux = self.slice_by_window(self.load_training_data_by_people(p), window_len)
+            training_test = {}
+            training_test['training'], training_test['test'] = self.slice_to_training_test(aux, training_proportion, seed)
+            list_of_peoples_data[p] = training_test
+            
+        return list_of_peoples_data
     #Loading data from all people
     def load_training_data_from_all_people(self, window_len, training_proportion=0.8, seed=1):
         dataset = sqlite3.connect(self.file_path)

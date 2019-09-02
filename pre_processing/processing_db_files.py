@@ -21,6 +21,7 @@ class Processing_DB_Files(object):
         test, test_labels = self.calculating_features_raw(model.test, model.label_tag, model.features[0], model.features[1], model.features[2])
         return training, training_labels, test, test_labels
     
+    
     def calculating_features_to_each_person(self, data_from_each_person, model:Model):
         list_of_peoples_data = {}
         for p in data_from_each_person:

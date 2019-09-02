@@ -14,21 +14,36 @@ Debug.DEBUG = 0
 hmp = HMP_Model()
 extra_trees = ExtraTreesClassifier(n_estimators = 10000, max_depth=1000, random_state=0)
 base_classification = Base_Classification(hmp, extra_trees)
-#proba, pred, dataset, select_valid_prediction = base_classification.predict_with_proba(50, 0.45)
-accuracies, accuracies_proba = base_classification.predict_with_proba(50, 0.55)
 
-#pred = pd.DataFrame(pred, columns=["Activity"])
-#best_accuracy = base_classification.find_best_window(range(10, 101, 50))  
+accuracies, accuracies_proba = base_classification.predict_for_list_people_with_proba(50, ["f1", "m1", "m2"] ,0.55)
+
+#TODO
+# retirar uma atividade do conjunto de treinamento e verificar se a confiabilidade dessta atividade desconhecida será baixa.
 
 
 
-#PLOT TREE IN FILE
+''' NOTES
+
+Just persons with more than 12 distinct activities will are used:
+
+"f1": 14;
+"f2": 08;
+"f3": 07;
+"f4": 07;
+"f5": 01;
+"m1": 12;
+"m10": 01;
+"m11": 01;
+"m2": 12;
+"m3": 07;
+"m4": 07;
+"m5": 02;
+"m6": 02;
+"m7": 07;
+"m8": 03;
+"m9": 04;    
+    
+
 '''
-from sklearn.tree import export_graphviz
-import pydot
 
-str_tree = export_graphviz(extra_trees.estimators_[0], out_file="tree.dot", feature_names=training.columns, filled=True, special_characters=True, rotate=True)
-
-(graph,) = pydot.graph_from_dot_file('tree.dot')
-graph.write_png('tree.png')'''
 
