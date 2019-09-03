@@ -17,9 +17,9 @@ class Outlier_Commons(object):
         return self.generate_outliers(training, training_labels, test, test_labels, activity_outlier)
 
     def get_indexes(self, training_labels, test_labels, activity):
-        train_indexes = np.where(training_labels != activity)
-        test_indexes = np.where(test_labels != activity)
-        outliers_indexes = np.where(training_labels == activity)
+        train_indexes = np.where(training_labels["activity"] != activity)[0]
+        test_indexes = np.where(test_labels["activity"] != activity)[0]
+        outliers_indexes = np.where(training_labels["activity"] == activity)[0]
         return train_indexes, test_indexes, outliers_indexes
     
     # Generate all sets to test method, with train, test and outlier
@@ -27,7 +27,6 @@ class Outlier_Commons(object):
         
         training_indexes, test_indexes, outliers_indexes = \
         self.get_indexes(training_labels, test_labels, activity)
-        return training_indexes, 0, 0, 0, 0, 0
         return training.iloc[training_indexes,:], training_labels.iloc[training_indexes,:],\
                 test.iloc[test_indexes,:], test_labels.iloc[test_indexes,:], \
                 training.iloc[outliers_indexes,:], training_labels.iloc[outliers_indexes,:]
@@ -51,6 +50,8 @@ class Outlier_Commons(object):
         Debug.print_debug("outliers_accuracy = {}".format(outliers_accuracy))
         
         return train_accuracy, test_accuracy, outliers_accuracy
+    
+        
         
         
         

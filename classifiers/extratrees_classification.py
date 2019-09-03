@@ -16,11 +16,15 @@ hmp = HMP_Model()
 extra_trees = ExtraTreesClassifier(n_estimators = 100, max_depth=100, random_state=0) #To test
 base_classification = Base_Classification(hmp, extra_trees)
 
+#TEST CLASSIFICATION
 #accuracies, accuracies_proba = base_classification.predict_for_list_people_with_proba(50, ["f1", "m1", "m2"] ,0.55)
 
-training_labels, test_labels, outlier_labels = base_classification.predict_outliers_for_list_people_with_proba(50, ["f1", "m1", "m2"], "walk" ,0.55)
+#TEST OUTLIER DETECTION
+
+outlier = base_classification.predict_outliers_for_list_people_with_proba(50, ["f1", "m1", "m2"], "eat_meat" ,0.55)
 
 #TODO
+# Dando divergância entre os dois protótipos de função de outliers - CORRIGIR
 # retirar uma atividade do conjunto de treinamento e verificar se a confiabilidade dessta atividade desconhecida será baixa.
 
 
@@ -45,7 +49,8 @@ Just persons with more than 12 distinct activities will are used:
 "m7": 07;
 "m8": 03;
 "m9": 04;    
-    
+
+*Walk se confunde muito com climb_stairs
 
 '''
 

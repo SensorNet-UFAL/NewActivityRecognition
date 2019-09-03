@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from models.model import Model
 import pandas as pd
+from collections import Counter
 from outlier.outlier_commons import Outlier_Commons
 
 
@@ -51,7 +52,7 @@ class Get_Accuracy(object):
         return return_indexes
             
     def simple_accuracy_outlier_activity(self, data_from_each_person, model:Model, clf, activity, threshold):
-        outliers_commons = Outlier_Commons()    
+        outliers_commons = Outlier_Commons()
         for p in data_from_each_person:
                 person_data = data_from_each_person[p]
                 training = person_data['training']['training_features']
@@ -59,4 +60,41 @@ class Get_Accuracy(object):
                 test = person_data['test']['test_features']
                 test_labels = person_data['test']['test_labels']
                 training, training_labels, test, test_labels, outlier, outlier_labels = outliers_commons.generate_outliers(training, training_labels, test, test_labels, activity)
-                return training_labels, test_labels, outlier_labels
+                clf.classes_ = training_labels.activity.unique()
+                clf.fit(training, training_labels)
+                pred = clf.predict_proba(outlier)
+                pred = pd.DataFrame(pred, columns = clf.classes_)
+                index_pred = self.get_indexes_with_valid_predictions(pred, threshold)
+                pred = clf.predict(training.iloc[index_pred, :])
+                counter = Counter(pred)
+                return_outlier = {}
+                return_outlier["outlier activity"] = activity
+                return_outlier["outlier pred"] = counter.most_common(1)[0][0]
+                return return_outlier
+
+    def get_outliers_confused_with_activities(self, data_from_each_person, model:Model, clf, threshold):
+        outliers_commons = Outlier_Commons()
+        for p in data_from_each_person:
+                return_dataframe = pd.DataFrame(columns=["outlier_activity","outlier_pred"])
+                person_data = data_from_each_person[p]
+                training = person_data['training']['training_features']
+                training_labels = person_data['training']['training_labels']
+                test = person_data['test']['test_features']
+                test_labels = person_data['test']['test_labels']
+                for activity in training_labels.activity.unique():
+                    training, training_labels, test, test_labels, outlier, outlier_labels = outliers_commons.generate_outliers(training, training_labels, test, test_labels, activity)
+                    
+                    if training.shape[0] > 0:
+                        clf.classes_ = training_labels.activity.unique()
+                        clf.fit(training, training_labels)
+                        pred = clf.predict_proba(outlier)
+                        pred = pd.DataFrame(pred, columns = clf.classes_)
+                        index_pred = self.get_indexes_with_valid_predictions(pred, threshold)
+                        pred = clf.predict(training.iloc[index_pred, :])
+                        counter = Counter(pred)
+                        print("outlier_activity: {} - outlier_pred: {}".format(activity, counter.most_common(1)[0][0]))
+                        #return_dataframe = pd.DataFrame([[activity, counter.most_common(1)[0][0]]], columns=["outlier_activity","outlier_pred"]).append(return_dataframe, ignore_index=True)
+                return return_dataframe
+
+
+
