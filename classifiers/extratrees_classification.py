@@ -12,10 +12,13 @@ from classifiers.base_classification import Base_Classification
 #===INITIALIZATION===#
 Debug.DEBUG = 0
 hmp = HMP_Model()
-extra_trees = ExtraTreesClassifier(n_estimators = 10000, max_depth=1000, random_state=0)
+#extra_trees = ExtraTreesClassifier(n_estimators = 10000, max_depth=1000, random_state=0) #Good performer
+extra_trees = ExtraTreesClassifier(n_estimators = 100, max_depth=100, random_state=0) #To test
 base_classification = Base_Classification(hmp, extra_trees)
 
-accuracies, accuracies_proba = base_classification.predict_for_list_people_with_proba(50, ["f1", "m1", "m2"] ,0.55)
+#accuracies, accuracies_proba = base_classification.predict_for_list_people_with_proba(50, ["f1", "m1", "m2"] ,0.55)
+
+training_labels, test_labels, outlier_labels = base_classification.predict_outliers_for_list_people_with_proba(50, ["f1", "m1", "m2"], "walk" ,0.55)
 
 #TODO
 # retirar uma atividade do conjunto de treinamento e verificar se a confiabilidade dessta atividade desconhecida será baixa.

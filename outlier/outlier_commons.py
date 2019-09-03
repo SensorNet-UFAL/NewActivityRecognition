@@ -27,9 +27,10 @@ class Outlier_Commons(object):
         
         training_indexes, test_indexes, outliers_indexes = \
         self.get_indexes(training_labels, test_labels, activity)
-        return training[training_indexes], training_labels[training_indexes],\
-                test[test_indexes], test_labels[test_indexes], \
-                training[outliers_indexes], training_labels[outliers_indexes]
+        return training_indexes, 0, 0, 0, 0, 0
+        return training.iloc[training_indexes,:], training_labels.iloc[training_indexes,:],\
+                test.iloc[test_indexes,:], test_labels.iloc[test_indexes,:], \
+                training.iloc[outliers_indexes,:], training_labels.iloc[outliers_indexes,:]
                 
     def get_accuracy(self, classifier, training_outlier, test_outlier, outlier):
         classifier.fit(training_outlier)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from models.model import Model
 import pandas as pd
+from outlier.outlier_commons import Outlier_Commons
 
 
 class Get_Accuracy(object):
@@ -38,12 +39,6 @@ class Get_Accuracy(object):
             #clf.fit(valid_data_from_each_person[p]['training']['training_features'], valid_data_from_each_person[p]['training']['training_labels'])
             accuracies[p] = clf.score(valid_data_from_each_person[p]['test']['test_features'], valid_data_from_each_person[p]['test']['test_labels'])
             
-            '''
-            # OLD
-            pred2 = clf.predict(person_data['test']['test_features'])
-            print("PERSON => {}".format(p))
-            return pred, pred2, person_data, valid_data_from_each_person
-            '''
         return accuracies
     
     def get_indexes_with_valid_predictions(self, dataframe_predicions:pd.DataFrame, threshold):
@@ -55,4 +50,13 @@ class Get_Accuracy(object):
                     break
         return return_indexes
             
-
+    def simple_accuracy_outlier_activity(self, data_from_each_person, model:Model, clf, activity, threshold):
+        outliers_commons = Outlier_Commons()    
+        for p in data_from_each_person:
+                person_data = data_from_each_person[p]
+                training = person_data['training']['training_features']
+                training_labels = person_data['training']['training_labels']
+                test = person_data['test']['test_features']
+                test_labels = person_data['test']['test_labels']
+                training, training_labels, test, test_labels, outlier, outlier_labels = outliers_commons.generate_outliers(training, training_labels, test, test_labels, activity)
+                return training_labels, test_labels, outlier_labels
