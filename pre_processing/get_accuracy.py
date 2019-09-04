@@ -81,20 +81,24 @@ class Get_Accuracy(object):
                 training_labels = person_data['training']['training_labels']
                 test = person_data['test']['test_features']
                 test_labels = person_data['test']['test_labels']
+                return_accuracy = []
                 for activity in training_labels.activity.unique():
-                    training, training_labels, test, test_labels, outlier, outlier_labels = outliers_commons.generate_outliers(training, training_labels, test, test_labels, activity)
-                    
-                    if training.shape[0] > 0:
-                        clf.classes_ = training_labels.activity.unique()
-                        clf.fit(training, training_labels)
-                        pred = clf.predict_proba(outlier)
+                    training_aux, training_labels_aux, test_aux, test_labels_aux, outlier_aux, outlier_labels_aux = outliers_commons.generate_outliers(training.copy(), training_labels.copy(), test.copy(), test_labels.copy(), activity)
+                    if training_aux.shape[0] > 0:
+                        clf.classes_ = training_labels_aux.activity.unique()
+                        clf.fit(training_aux, training_labels_aux)
+                        pred = clf.predict_proba(outlier_aux)
                         pred = pd.DataFrame(pred, columns = clf.classes_)
                         index_pred = self.get_indexes_with_valid_predictions(pred, threshold)
-                        pred = clf.predict(training.iloc[index_pred, :])
+                        return_accuracy.append({"Activity Outlier": activity, "Accouracy":(1-(len(index_pred)/len(pred)))})
+                        pred = clf.predict(training_aux.iloc[index_pred, :])
                         counter = Counter(pred)
-                        print("outlier_activity: {} - outlier_pred: {}".format(activity, counter.most_common(1)[0][0]))
-                        #return_dataframe = pd.DataFrame([[activity, counter.most_common(1)[0][0]]], columns=["outlier_activity","outlier_pred"]).append(return_dataframe, ignore_index=True)
-                return return_dataframe
+                        #print("outlier_activity: {} - outlier_pred: {}".format(activity, counter.most_common(1)[0][0]))
+                        return_dataframe = pd.DataFrame([[activity, counter.most_common(1)[0][0]]], columns=["outlier_activity","outlier_pred"]).append(return_dataframe, ignore_index=True)
+                        
+                    else:
+                        print("Empty Training: {} | Activity: {}".format(training_aux, activity))
+                return return_dataframe, return_accuracy
 
 
 

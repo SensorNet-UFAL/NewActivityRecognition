@@ -21,7 +21,7 @@ base_classification = Base_Classification(hmp, extra_trees)
 
 #TEST OUTLIER DETECTION
 
-outlier = base_classification.predict_outliers_for_list_people_with_proba(50, ["f1", "m1", "m2"], "eat_meat" ,0.55)
+return_dataframe, return_accuracy = base_classification.predict_outliers_for_list_people_with_proba(50, ["f1", "m1", "m2"], "eat_soup" ,0.55)
 
 #TODO
 # Dando divergância entre os dois protótipos de função de outliers - CORRIGIR
