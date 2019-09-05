@@ -3,6 +3,7 @@ from models.model import Model
 import pandas as pd
 from collections import Counter
 from outlier.outlier_commons import Outlier_Commons
+from sklearn.preprocessing import StandardScaler
 
 
 class Get_Accuracy(object):
@@ -74,12 +75,13 @@ class Get_Accuracy(object):
 
     def get_outliers_confused_with_activities(self, data_from_each_person, model:Model, clf, threshold):
         outliers_commons = Outlier_Commons()
+        scaler = StandardScaler()
         for p in data_from_each_person:
                 return_dataframe = pd.DataFrame(columns=["outlier_activity","outlier_pred"])
                 person_data = data_from_each_person[p]
-                training = person_data['training']['training_features']
+                training = pd.DataFrame(scaler.fit_transform(person_data['training']['training_features']))
                 training_labels = person_data['training']['training_labels']
-                test = person_data['test']['test_features']
+                test = pd.DataFrame(scaler.fit_transform(person_data['test']['test_features']))
                 test_labels = person_data['test']['test_labels']
                 return_accuracy = []
                 for activity in training_labels.activity.unique():
@@ -98,7 +100,7 @@ class Get_Accuracy(object):
                         
                     else:
                         print("Empty Training: {} | Activity: {}".format(training_aux, activity))
-                return return_dataframe, return_accuracy
+                return return_dataframe, return_accuracy, data_from_each_person
 
 
 
