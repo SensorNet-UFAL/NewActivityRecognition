@@ -43,8 +43,8 @@ class Base_Classification(object):
         accuracies = self.get_accuracy.simple_accuracy_mean_to_each_person(features_all_people, self.model, self.clf)
         return accuracies, accuracies_proba
     
-    def predict_outliers_for_list_people_with_proba(self, window, list_people, activity, threshold):
-        data_list_people = self.model.load_training_data_from_list_people(window, list_people)
+    def predict_outliers_for_list_people_with_proba(self, window, list_people, activity, threshold, remove_outliers = 0):
+        data_list_people = self.model.load_training_data_from_list_people(window, list_people, remove_outliers)
         features_all_people = self.processing.calculating_features_to_each_person(data_list_people, self.model)
         #return self.get_accuracy.simple_accuracy_outlier_activity(features_all_people, self.model, self.clf, activity,threshold)
         return self.get_accuracy.get_outliers_confused_with_activities(features_all_people, self.model, self.clf,threshold)

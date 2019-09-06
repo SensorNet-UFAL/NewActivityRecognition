@@ -5,6 +5,7 @@ import sqlite3
 import pandas as pd
 import numpy as np
 import random
+from pyod.models.knn import KNN
 
 class Model(object):
     
@@ -20,7 +21,7 @@ class Model(object):
         self.file_path = Project.project_root+"\\data\\sql\\"+file
         self.table_name = table_name
 
-    def get_all_readings_from_person(self, person_tag, additional_where = ""):
+    def get_all_readings_from_person(self, person_tag, remove_outliers = 0, additional_where = ""):
         #Debug.print_debug(self.file_path)
         dataset = sqlite3.connect(self.file_path)
         if len(additional_where) > 0:
@@ -28,6 +29,14 @@ class Model(object):
         else:
             to_return = self.get_data_sql_query("select {} from {} where {} like '{}'".format(', '.join(self.features), self.table_name, self.person_column, person_tag), dataset)
         self.data = to_return
+        if(remove_outliers > 0):
+            knn =  KNN(contamination=remove_outliers)
+            to_return_aux = to_return.copy()
+            to_return_aux = to_return_aux.drop(self.label_tag,1)
+            knn.fit(to_return_aux)
+            pred = knn.predict(to_return_aux)
+            to_return = to_return.iloc[np.where(pred == 0)[0], :]
+            
         return to_return
     
     def get_labels_to_person(self, person):
@@ -44,15 +53,15 @@ class Model(object):
         list_window = self.slice_by_window(list_raw_data, window_len)
         self.training, self.test = self.slice_to_training_test(list_window, training_proportion, seed)
     #Loading data with windows by people
-    def load_training_data_by_people(self, person_tag):
-        list_raw_data = self.get_all_readings_from_person(person_tag)
+    def load_training_data_by_people(self, person_tag, remove_outliers = 0):
+        list_raw_data = self.get_all_readings_from_person(person_tag, remove_outliers)
         return list_raw_data
     
     #Loading data from list of people
-    def load_training_data_from_list_people(self, window_len, list_people, training_proportion=0.8, seed=1):
+    def load_training_data_from_list_people(self, window_len, list_people, remove_outliers = 0, training_proportion=0.8, seed=1):
         list_of_peoples_data = {}
         for p in list_people:
-            aux = self.slice_by_window(self.load_training_data_by_people(p), window_len)
+            aux = self.slice_by_window(self.load_training_data_by_people(p, remove_outliers), window_len)
             training_test = {}
             training_test['training'], training_test['test'] = self.slice_to_training_test(aux, training_proportion, seed)
             list_of_peoples_data[p] = training_test
