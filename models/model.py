@@ -15,7 +15,8 @@ class Model(object):
     features = ["x", "y", "z", "activity"]
     label_tag = "activity"
     person_column = "person"
-    training, test, data = pd.DataFrame(), pd.DataFrame(), pd.DataFrame()    
+    training, test, data = pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
+    data_with_window = None    
     
     def __init__(self, file, table_name):
         self.file_path = Project.project_root+"\\data\\sql\\"+file
@@ -65,7 +66,7 @@ class Model(object):
             training_test = {}
             training_test['training'], training_test['test'] = self.slice_to_training_test(aux, training_proportion, seed)
             list_of_peoples_data[p] = training_test
-            
+        self.data_with_window = list_of_peoples_data
         return list_of_peoples_data
     #Loading data from all people
     def load_training_data_from_all_people(self, window_len, training_proportion=0.8, seed=1):

@@ -21,12 +21,13 @@ base_classification = Base_Classification(hmp, extra_trees)
 
 #TEST OUTLIER DETECTION
 
-return_dataframe, return_accuracy, data_from_each_person = base_classification.predict_outliers_for_list_people_with_proba(50, ["f1", "m1", "m2"], "eat_soup" ,0.55, remove_outliers=0.01)
+return_dataframe, return_accuracy, data_from_each_person = base_classification.predict_outliers_for_list_people_with_proba(50, ["f1", "m1", "m2"], "eat_soup" ,0.55, remove_outliers=0.05)
 
-#===>> TODO
-#Incluir os parametros do modelo ARIMA nas features
+#===>> HISTORIC
+#1º filtro de outliers implementado, mas não deu resultado.
+#2º Utilizar MinMaxScaler para normalizar os dados.
+#3º (Artigo -> https://scialert.net/fulltextmobile/?doi=jas.2010.950.958)Incluir os parametros do modelo ARIMA nas features - Pesquisar como utilizar o retorno de seasonal_decompose como entrada em algoritmo de classificação.
 
-data_from_each_person["f1"]["training"]["training_features"]
 
 ''' NOTES
 
