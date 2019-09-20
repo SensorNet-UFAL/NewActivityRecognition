@@ -18,6 +18,8 @@ base_classification = Base_Classification(hmp, extra_trees)
 
 #TEST CLASSIFICATION
 #accuracies, accuracies_proba = base_classification.predict_for_list_people_with_proba(50, ["f1", "m1", "m2"] ,0.55)
+#extra_trees_features_importance = extra_trees.feature_importances_
+
 
 #TEST OUTLIER DETECTION
 

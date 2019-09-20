@@ -44,12 +44,21 @@ extracted_features = extract_features(dataframe_3, column_id="id", column_sort="
 impute(extracted_features)
 y = np.array(labels)
 y2 = pd.Series(y)
-features_filtered = select_features(extracted_features, y)
+y2.index+= 1
+features_filtered = select_features(extracted_features, y2)
 
-X_train, X_test, y_train, y_test = train_test_split(features_filtered, y, test_size=0.33, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(features_filtered, y, test_size=0.2, random_state=42)
 
 extra_trees = ExtraTreesClassifier(n_estimators = 10000, max_depth=1000, random_state=0)
 extra_trees.fit(X_train, y_train)
 pred = extra_trees.predict(X_test)
 accuracy_score(y_test, pred)
+
 relevant_features = extract_relevant_features(dataframe_3, y2, column_id='id', column_sort='time') # error: ValueError: The following ids are in the time series container but are missing in y: {3480}
+X_train, X_test, y_train, y_test = train_test_split(relevant_features, y, test_size=0.2, random_state=42)
+extra_trees = ExtraTreesClassifier(n_estimators = 10000, max_depth=1000, random_state=0)
+extra_trees.fit(X_train, y_train)
+pred = extra_trees.predict(X_test)
+accuracy_score(y_test, pred)
+ts_extratree_features_importance = extra_trees.feature_importances_
+ts_extratree_features_importance = pd.DataFrame(extra_trees.feature_importances_, index = X_train.columns, columns=['importance']).sort_values('importance', ascending=False)
