@@ -33,13 +33,11 @@ class Get_Accuracy(object):
             #Filtering data with probability greater than the threshold
             valid_indexes = self.get_indexes_with_valid_predictions(pred, threshold)
             valid_data_from_each_person[p] = {"training":{}, "test":{}}
-            valid_data_from_each_person[p]["training"]["training_features"] = person_data['training']['training_features'].iloc[valid_indexes,:]
-            valid_data_from_each_person[p]["training"]["training_labels"] = person_data['training']['training_labels'].iloc[valid_indexes,:]
             valid_data_from_each_person[p]["test"]["test_features"] = person_data['test']['test_features'].iloc[valid_indexes,:]
             valid_data_from_each_person[p]["test"]["test_labels"] = person_data['test']['test_labels'].iloc[valid_indexes,:]
             
             #clf.fit(valid_data_from_each_person[p]['training']['training_features'], valid_data_from_each_person[p]['training']['training_labels'])
-            accuracies[p] = clf.score(valid_data_from_each_person[p]['test']['test_features'], valid_data_from_each_person[p]['test']['test_labels'])
+            accuracies[p] = {"accuracy":clf.score(valid_data_from_each_person[p]['test']['test_features'], valid_data_from_each_person[p]['test']['test_labels']),"discarted":(len(pred)-len(valid_indexes))/len(pred)}
             
         return accuracies
     

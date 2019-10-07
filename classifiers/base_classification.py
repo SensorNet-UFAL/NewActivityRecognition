@@ -15,18 +15,16 @@ class Base_Classification(object):
         super().__init__()
      
     #Finding the best window to improve the accuracy
-    def find_best_window(self, interval):
-        best_accuracy = {'window':1, 'accuracy':0}
+    def find_best_window(self, interval, list_people):
+        accuracies = []
         for w in interval:
             Debug.print_debug("WINDOWS SIZE: {}".format(w))
-            data_all_people = self.model.load_training_data_from_all_people(w)
+            data_all_people = self.model.load_training_data_from_list_people(w, list_people)
             features_all_people = self.processing.calculating_features_to_each_person(data_all_people, self.model)
             accuracies_dict = self.get_accuracy.simple_accuracy_mean_to_each_person(features_all_people, self.model, self.clf)
             accuracy_mean = mean(accuracies_dict.values())
-            if accuracy_mean > best_accuracy["accuracy"]:
-                best_accuracy["accuracy"] = accuracy_mean
-                best_accuracy["window"] = w
-        return best_accuracy
+            accuracies.append({'window':w, 'accuracy':accuracy_mean})
+        return accuracies
             
         
     def predict_for_all_people_with_proba(self, window, threshold):

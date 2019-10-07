@@ -50,7 +50,7 @@ class Model(object):
     
     #Loading data with windows by people
     def load_training_data_by_window_by_people(self, person_tag, window_len, training_proportion=0.8, seed=1, additional_where = ""):
-        list_raw_data = self.get_all_readings_from_person(person_tag, additional_where)
+        list_raw_data = self.get_all_readings_from_person(person_tag, additional_where = additional_where)
         list_window = self.slice_by_window(list_raw_data, window_len)
         self.training, self.test = self.slice_to_training_test(list_window, training_proportion, seed)
     #Loading data with windows by people
