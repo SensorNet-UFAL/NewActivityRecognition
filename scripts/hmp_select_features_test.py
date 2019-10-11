@@ -24,7 +24,7 @@ processing = Processing_DB_Files()
 project = Project()
 extra_trees = ExtraTreesClassifier(n_estimators = 1000, max_depth=1000, random_state=0) #Good performer
 base_classification = Base_Classification(hmp, extra_trees)
-_, _, _ = base_classification.predict_outliers_for_list_people_with_proba(50, ["f1", "m1", "m2"], "eat_soup" ,0.55, remove_outliers=0.05)
+_, _, _ = base_classification.predict_outliers_for_list_people_with_proba(36, ["f1", "m1", "m2"], "eat_soup" ,0.55, remove_outliers=0.05)
 
 #===Extract TsFresh Features===#
 dataframe_1 = hmp.data_with_window["f1"]["training"]

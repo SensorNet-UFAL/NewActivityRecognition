@@ -37,7 +37,7 @@ class Get_Accuracy(object):
             valid_data_from_each_person[p]["test"]["test_labels"] = person_data['test']['test_labels'].iloc[valid_indexes,:]
             
             #clf.fit(valid_data_from_each_person[p]['training']['training_features'], valid_data_from_each_person[p]['training']['training_labels'])
-            accuracies[p] = {"accuracy":clf.score(valid_data_from_each_person[p]['test']['test_features'], valid_data_from_each_person[p]['test']['test_labels']),"discarted":(len(pred)-len(valid_indexes))/len(pred)}
+            accuracies[p] = {"accuracy":clf.score(valid_data_from_each_person[p]['test']['test_features'], valid_data_from_each_person[p]['test']['test_labels']),"discarted":(len(pred)-len(valid_indexes))/len(pred), "len_activity":len(valid_data_from_each_person[p]["test"]["test_labels"]["activity"].unique())}
             
         return accuracies
     
@@ -71,7 +71,7 @@ class Get_Accuracy(object):
                 return_outlier["outlier pred"] = counter.most_common(1)[0][0]
                 return return_outlier
 
-    def get_outliers_confused_with_activities(self, data_from_each_person, model:Model, clf, threshold):
+    def get_outliers_confused_with_activities(self, data_from_each_person, clf, threshold):
         outliers_commons = Outlier_Commons()
         scaler = StandardScaler()
         for p in data_from_each_person:
