@@ -48,4 +48,3 @@ for t in np.arange(0.05, 1, 0.05):
     return_proba["threshold"] = t
     accuracy_threshould = accuracy_threshould.append(return_proba, ignore_index=True)
 
-
