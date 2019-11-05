@@ -4,6 +4,9 @@ import pandas as pd
 from collections import Counter
 from outlier.outlier_commons import Outlier_Commons
 from sklearn.preprocessing import StandardScaler
+import numpy as np
+from sklearn.model_selection import StratifiedKFold
+import statistics as st
 
 
 class Get_Accuracy(object):
@@ -41,6 +44,22 @@ class Get_Accuracy(object):
             
         return accuracies
     
+    def simple_accuracy_with_valid_predictions(self, x_train, x_test, y_train, y_test, clf, threshold):
+        #Getting unique labels to the data
+        clf.classes_ = y_test.activity.unique()
+        #Fit model
+        clf.fit(x_train, y_train)
+        #Getting the probability table
+        pred = clf.predict_proba(x_test)
+        pred = pd.DataFrame(pred, columns = clf.classes_)
+        #Filtering data with probability greater than the threshold
+        valid_indexes = self.get_indexes_with_valid_predictions(pred, threshold)
+        new_x_test = x_test.iloc[valid_indexes,:]
+        new_y_test = y_test.iloc[valid_indexes,:]
+        accurary = {"accuracy":clf.score(new_x_test, new_y_test), "discarted":(len(pred)-len(valid_indexes))/len(pred), "len_activity":len(new_y_test["activity"].unique())}
+        return accurary
+        
+        
     def get_indexes_with_valid_predictions(self, dataframe_predicions:pd.DataFrame, threshold):
         return_indexes = []
         for index, row in dataframe_predicions.iterrows():
@@ -70,6 +89,40 @@ class Get_Accuracy(object):
                 return_outlier["outlier activity"] = activity
                 return_outlier["outlier pred"] = counter.most_common(1)[0][0]
                 return return_outlier
+            
+    def stratified_kfold_accuracy_outlier(self, data, y, clf, threshold, person):
+        skf = StratifiedKFold(n_splits=10, random_state=None, shuffle=False)
+        outliers_commons = Outlier_Commons()
+        return_accuracy = []
+        for activity in y.activity.unique():
+            accuracy_list = []
+            for train_index, test_index in skf.split(data, y):
+                x_train, x_test = data.loc[train_index], data.loc[test_index]
+                y_train, y_test = y.loc[train_index], y.loc[test_index]
+                
+                test_valid_rows = np.isfinite(x_test["y__quantile__q_0.8"])
+                train_valid_rows = np.isfinite(x_train["y__quantile__q_0.8"])
+                
+                x_test = x_test[test_valid_rows]
+                y_test = y_test[test_valid_rows]
+                x_train = x_train[train_valid_rows]
+                y_train = y_train[train_valid_rows]
+                
+                training_aux, training_labels_aux, test_aux, test_labels_aux, outlier_aux, outlier_labels_aux = outliers_commons.generate_outliers(x_train.copy(), y_train.copy(), x_test.copy(), y_test.copy(), activity)
+                if training_aux.shape[0] > 0:
+                    clf.classes_ = training_labels_aux.activity.unique()
+                    clf.fit(training_aux, training_labels_aux)
+                    pred = clf.predict_proba(outlier_aux)
+                    pred = pd.DataFrame(pred, columns = clf.classes_)
+                    index_pred = self.get_indexes_with_valid_predictions(pred, threshold)
+                    accuracy_list.append(1-(len(index_pred)/len(pred)))
+                    
+            
+            return_accuracy.append({"Person":person,"Activity Outlier": activity, "Accouracy":st.mean(accuracy_list)})
+        return return_accuracy
+                
+            
+            
 
     def get_outliers_confused_with_activities(self, data_from_each_person, clf, threshold):
         outliers_commons = Outlier_Commons()
