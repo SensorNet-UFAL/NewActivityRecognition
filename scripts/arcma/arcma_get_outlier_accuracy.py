@@ -29,7 +29,7 @@ s = save()
 person_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 accuracy_threshould_list = []
 data = {}
-threshold = 0.75
+threshold = 0.80
 for p in person_list:
     data = s.load_var("arcma_relevante_features\\relevant_features_{}.pkl".format(p))
     y = s.load_var("arcma_relevante_features\\y_{}.pkl".format(p))

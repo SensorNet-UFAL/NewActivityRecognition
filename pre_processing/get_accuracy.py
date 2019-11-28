@@ -109,7 +109,7 @@ class Get_Accuracy(object):
                 y_train = y_train[train_valid_rows]
                 
                 training_aux, training_labels_aux, test_aux, test_labels_aux, outlier_aux, outlier_labels_aux = outliers_commons.generate_outliers(x_train.copy(), y_train.copy(), x_test.copy(), y_test.copy(), activity)
-                if training_aux.shape[0] > 0:
+                if training_aux.shape[0] > 0 and outlier_aux.shape[0] > 0:
                     clf.classes_ = training_labels_aux.activity.unique()
                     clf.fit(training_aux, training_labels_aux)
                     pred = clf.predict_proba(outlier_aux)

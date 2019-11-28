@@ -1,0 +1,27 @@
+for t in np.arange(0.05, 1, 0.05):
+	accuracy_threshould_temp_aux = pd.DataFrame(columns=["accuracy","discarted", "len_activity"])
+	for p in person_list:
+		relevant_features = s.load_var("arcma_relevante_features\\relevant_features_{}.pkl".format(p))
+		y = s.load_var("arcma_relevante_features\\y_{}.pkl".format(p))
+		y = pd.DataFrame(y, columns=[arcma.label_tag])
+		X_train, X_test, y_train, y_test = train_test_split(relevant_features, y, test_size=0.2, random_state=42)
+		
+		data = {}
+		data[p] = {}
+		data[p]["training"] = {}
+		data[p]["training"]["training_features"] = X_train
+		data[p]["training"]["training_labels"] = y_train
+
+		data[p]["test"] = {}
+		data[p]["test"]["test_features"] = X_test
+		data[p]["test"]["test_labels"] = y_test
+
+		return_proba = base_classification.get_accuracy.simple_accuracy_mean_to_each_person_with_proba(data, arcma, extra_trees, t)
+        return_proba = return_proba[list(return_proba.keys())[0]]
+
+        accuracy_threshould_temp_aux = accuracy_threshould_temp_aux.append(return_proba, ignore_index=True)
+
+    accuracy_mean = accuracy_mean.append(pd.DataFrame([[st.mean(accuracy_threshould_temp_aux["accuracy"]), st.mean(accuracy_threshould_temp_aux["discarted"]), st.mean(accuracy_threshould_temp_aux["len_activity"]), t]], columns=["accuracy","discarted", "len_activity", "threshold"]))
+
+
+
