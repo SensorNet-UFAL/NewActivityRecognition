@@ -6,7 +6,7 @@ from sklearn.ensemble import ExtraTreesClassifier # Extra Trees
 from models.arcma_model import ARCMA_Model
 import pandas as pd
 from pre_processing.processing_db_files import Processing_DB_Files  
-from utils.project import Project
+from utils.project import Project, slash
 from scripts.save_workspace import save
 from pre_processing.get_accuracy import Get_Accuracy
 from sklearn.model_selection import StratifiedKFold
@@ -27,8 +27,8 @@ persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 accuracy_by_person = pd.DataFrame()
 for p in persons:
     s = save()
-    relevant_features = s.load_var("arcma_relevante_features\\relevant_features_{}.pkl".format(p))
-    y = s.load_var("arcma_relevante_features\\y_{}.pkl".format(p))
+    relevant_features = s.load_var("arcma_relevante_features{}relevant_features_{}.pkl".format(slash, p))
+    y = s.load_var("arcma_relevante_features{}y_{}.pkl".format(slash, p))
     y = pd.DataFrame(y, columns=[arcma.label_tag])
     skf = StratifiedKFold(n_splits=10, random_state=None, shuffle=False)
     

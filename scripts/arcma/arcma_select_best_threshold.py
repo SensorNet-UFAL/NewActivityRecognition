@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from pre_processing.processing_db_files import Processing_DB_Files  
-from utils.project import Project
+from utils.project import Project, slash
 from scripts.save_workspace import save
 import statistics as st
 
@@ -32,8 +32,8 @@ accuracy_mean = pd.DataFrame(columns=["accuracy","discarted", "len_activity", "t
 for t in np.arange(0.05, 1, 0.05):
     accuracy_threshould_temp_aux = pd.DataFrame(columns=["accuracy","discarted", "len_activity"])
     for p in person_list:
-        relevant_features = s.load_var("arcma_relevante_features\\relevant_features_{}.pkl".format(p))
-        y = s.load_var("arcma_relevante_features\\y_{}.pkl".format(p))
+        relevant_features = s.load_var("arcma_relevante_features{}relevant_features_{}.pkl".format(slash, p))
+        y = s.load_var("arcma_relevante_features{}y_{}.pkl".format(slash, p))
         y = pd.DataFrame(y, columns=[arcma.label_tag])
         X_train, X_test, y_train, y_test = train_test_split(relevant_features, y, test_size=0.2, random_state=42)
         data = {}

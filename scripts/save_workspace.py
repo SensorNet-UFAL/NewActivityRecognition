@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from utils.project import Project
+from utils.project import Project, slash
 import dill
 import pickle
 
 class save(object):
     
-    path = Project.project_root+"\\workspace\\"
+    path = Project.project_root+"{}workspace{}".format(slash, slash)
     #load the session again:
     def load_session(self, filename = 'globalsave.pkl'):
         dill.load_session(self.path+filename)

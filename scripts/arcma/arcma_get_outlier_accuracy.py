@@ -8,7 +8,7 @@ from classifiers.base_classification import Base_Classification
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from pre_processing.processing_db_files import Processing_DB_Files  
-from utils.project import Project
+from utils.project import Project, slash
 from scripts.save_workspace import save
 from sklearn.model_selection import StratifiedKFold
 import numpy as np
@@ -31,8 +31,8 @@ accuracy_threshould_list = []
 data = {}
 threshold = 0.80
 for p in person_list:
-    data = s.load_var("arcma_relevante_features\\relevant_features_{}.pkl".format(p))
-    y = s.load_var("arcma_relevante_features\\y_{}.pkl".format(p))
+    data = s.load_var("arcma_relevante_features{}relevant_features_{}.pkl".format(slash, p))
+    y = s.load_var("arcma_relevante_features{}y_{}.pkl".format(slash, p))
     y = pd.DataFrame(y, columns=[arcma.label_tag])
      
     print("------------------------------------")

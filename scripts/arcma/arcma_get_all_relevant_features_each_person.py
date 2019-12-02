@@ -8,7 +8,7 @@ from tsfresh import extract_relevant_features
 import pandas as pd
 import numpy as np
 from pre_processing.processing_db_files import Processing_DB_Files
-from utils.project import Project
+from utils.project import Project, slash
 from scripts.save_workspace import save
 
 #===INITIALIZATION===#
@@ -45,5 +45,5 @@ for p in data_list_people:
     y2.index+= 1
 
     relevant_features = extract_relevant_features(dataframe_3, y2, column_id='id', column_sort='time')
-    s.save_var(relevant_features, "arcma\\relevant_features_{}.pkl".format(p))
-    s.save_var(y2, "arcma\\y_{}.pkl".format(p))
+    s.save_var(relevant_features, "arcma{}relevant_features_{}.pkl".format(slash, p))
+    s.save_var(y2, "arcma{}y_{}.pkl".format(slash, p))

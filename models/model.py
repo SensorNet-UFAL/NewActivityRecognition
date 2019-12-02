@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from utils.debug import Debug
-from utils.project import Project
+from utils.project import Project, slash
 import sqlite3
 import pandas as pd
 import numpy as np
@@ -19,7 +19,7 @@ class Model(object):
     data_with_window = None    
     
     def __init__(self, file, table_name):
-        self.file_path = Project.project_root+"\\data\\sql\\"+file
+        self.file_path = Project.project_root+"{}data{}sql{}".format(slash, slash, slash)+file
         self.table_name = table_name
 
     def get_all_readings_from_person(self, person_tag, remove_outliers = 0, additional_where = ""):
