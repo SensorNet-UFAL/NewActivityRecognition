@@ -2,7 +2,8 @@ import datetime
 
 class Project(object):
     #project_root = "C:\\Users\\WYLKEN-DNIT\\Documents\\NewActivityRecognition"
-    project_root = "C:\\Users\\wylken.machado.INTRA\\Desktop\\NewActivityRecognition"
+    #project_root = "C:\\Users\\wylken.machado.INTRA\\Desktop\\NewActivityRecognition"
+    project_root = "/home/wylken.machado@laccan.net/NewActivityRecognition"
     
     def log(self, str):
         now = datetime.datetime.now()
