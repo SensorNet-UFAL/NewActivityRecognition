@@ -24,6 +24,7 @@ class Model(object):
 
     def get_all_readings_from_person(self, person_tag, remove_outliers = 0, additional_where = ""):
         #Debug.print_debug(self.file_path)
+        print(self.file_path)
         dataset = sqlite3.connect(self.file_path)
         if len(additional_where) > 0:
             to_return = self.get_data_sql_query("select {} from {} where {} like {} {}".format(', '.join(self.features), self.table_name, self.person_column, person_tag, additional_where), dataset)
