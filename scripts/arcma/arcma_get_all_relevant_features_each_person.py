@@ -19,7 +19,7 @@ project = Project()
 extra_trees = ExtraTreesClassifier(n_estimators = 1000, max_depth=1000, random_state=0) #Good performer
 base_classification = Base_Classification(arcma, extra_trees)
 s = save()
-data_list_people = arcma.load_training_data_from_list_people(50, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], remove_outliers=0.05)
+data_list_people = arcma.load_training_data_from_list_people(26, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], remove_outliers=0.05)
 
 
 for p in data_list_people: 
