@@ -45,5 +45,5 @@ for p in data_list_people:
     y2.index+= 1
 
     relevant_features = extract_relevant_features(dataframe_3, y2, column_id='id', column_sort='time')
-    s.save_var(relevant_features, "arcma{}relevant_features_{}.pkl".format(slash, p))
-    s.save_var(y2, "arcma{}y_{}.pkl".format(slash, p))
+    s.save_var(relevant_features, "arcma_relevante_features{}relevant_features_{}.pkl".format(slash, p))
+    s.save_var(y2, "arcma_relevante_features{}y_{}.pkl".format(slash, p))

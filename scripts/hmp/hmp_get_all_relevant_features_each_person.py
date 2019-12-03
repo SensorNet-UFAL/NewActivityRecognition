@@ -12,7 +12,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from pre_processing.processing_db_files import Processing_DB_Files
 from sklearn.metrics import accuracy_score
-from utils.project import Project
+from utils.project import Project, slash
 from scripts.save_workspace import save
 
 #===INITIALIZATION===#
@@ -49,5 +49,5 @@ for p in data_list_people:
     y2.index+= 1
 
     relevant_features = extract_relevant_features(dataframe_3, y2, column_id='id', column_sort='time')
-    s.save_var(relevant_features, "relevant_features_{}.pkl".format(p))
-    s.save_var(y2, "y_{}.pkl".format(p))
+    s.save_var(relevant_features, "hmp_relevant_features{}relevant_features_{}.pkl".format(slash,p))
+    s.save_var(y2, "hmp_relevant_features{}y_{}.pkl".format(slash, p))
