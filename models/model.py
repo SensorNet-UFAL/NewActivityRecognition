@@ -55,15 +55,15 @@ class Model(object):
         list_window = self.slice_by_window(list_raw_data, window_len)
         self.training, self.test = self.slice_to_training_test(list_window, training_proportion, seed)
     #Loading data with windows by people
-    def load_training_data_by_people(self, person_tag, remove_outliers = 0):
-        list_raw_data = self.get_all_readings_from_person(person_tag, remove_outliers)
+    def load_training_data_by_people(self, person_tag, remove_outliers = 0, additional_where = ""):
+        list_raw_data = self.get_all_readings_from_person(person_tag, remove_outliers, additional_where = additional_where)
         return list_raw_data
     
     #Loading data from list of people
-    def load_training_data_from_list_people(self, window_len, list_people, remove_outliers = 0, training_proportion=0.8, seed=1):
+    def load_training_data_from_list_people(self, window_len, list_people, remove_outliers = 0, training_proportion=0.8, seed=1, additional_where = ""):
         list_of_peoples_data = {}
         for p in list_people:
-            aux = self.slice_by_window(self.load_training_data_by_people(p, remove_outliers), window_len)
+            aux = self.slice_by_window(self.load_training_data_by_people(p, remove_outliers, additional_where = additional_where), window_len)
             training_test = {}
             training_test['training'], training_test['test'] = self.slice_to_training_test(aux, training_proportion, seed)
             list_of_peoples_data[p] = training_test
