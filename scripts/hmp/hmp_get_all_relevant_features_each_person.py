@@ -23,7 +23,7 @@ project = Project()
 extra_trees = ExtraTreesClassifier(n_estimators = 1000, max_depth=1000, random_state=0) #Good performer
 base_classification = Base_Classification(hmp, extra_trees)
 s = save()
-data_list_people = hmp.load_training_data_from_list_people(36, ["f1", "m1", "m2"], remove_outliers=0.05)
+data_list_people = hmp.load_training_data_from_list_people(16, ["f1", "m1", "m2"], remove_outliers=0.05)
 
 
 for p in data_list_people: 
