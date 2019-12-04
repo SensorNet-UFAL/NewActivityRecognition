@@ -19,7 +19,6 @@ project = Project()
 extra_trees = ExtraTreesClassifier(n_estimators = 1000, max_depth=1000, random_state=0) #Good performer
 s = save()
 p_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-p_list=[1]
 data_list_people = umafall.load_training_data_from_list_people(10, p_list, remove_outliers=0.05, additional_where="and sensor=2 and body=3") # select magnetometer in waist - best accuracy
 
 
