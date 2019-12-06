@@ -36,8 +36,8 @@ for c in classifiers:
         
         x_train, x_test, y_train, y_test = train_test_split(relevant_features, y, test_size=0.2, random_state=42)
         
-        test_valid_rows = np.isfinite(x_test["y__quantile__q_0.8"])
-        train_valid_rows = np.isfinite(x_train["y__quantile__q_0.8"])
+        test_valid_rows = np.isfinite(x_test["x__maximum"])
+        train_valid_rows = np.isfinite(x_train["x__maximum"])
         
         x_test = x_test[test_valid_rows]
         y_test = y_test[test_valid_rows]
