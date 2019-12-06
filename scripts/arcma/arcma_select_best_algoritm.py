@@ -44,8 +44,8 @@ for c in classifiers:
     person_accuracies = []
     for p in persons:
         s = save()
-        relevant_features = s.load_var("arcma_relevante_features{}relevant_features_{}.pkl".format(slash, p))
-        y = s.load_var("arcma_relevante_features{}y_{}.pkl".format(slash, p))
+        relevant_features = s.load_var("arcma_relevant_features{}relevant_features_{}.pkl".format(slash, p))
+        y = s.load_var("arcma_relevant_features{}y_{}.pkl".format(slash, p))
         y = pd.DataFrame(y, columns=[arcma.label_tag])
         
         x_train, x_test, y_train, y_test = train_test_split(relevant_features, y, test_size=0.2, random_state=42)

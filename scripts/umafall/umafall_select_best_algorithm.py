@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from utils.debug import Debug
 from models.umafall_model import UMAFALL_Model
 #===== Machine Learn =====#
 from sklearn.neighbors import KNeighborsClassifier # kNN
@@ -16,6 +15,7 @@ from pre_processing.get_accuracy import Get_Accuracy
 import numpy as np
 import statistics as st
 from utils.project import Project, slash
+from scripts.save_workspace import save
 
 #===INITIALIZATION===#
 umafall = UMAFALL_Model()
@@ -27,15 +27,12 @@ project = Project()
 project.log("=====================UMAFALL_SELECT_BEST_ALGORITHM=====================")
 for c in classifiers:
     print(c)
-    #base_classification = Base_Classification(arcma, classifiers[key])
-    #_, accuracies_proba = base_classification.predict_for_list_people_with_proba(36, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],0.1)
-    #mean_aux = []
     person_accuracies = []
     for p in persons:
         s = save()
-        relevant_features = s.load_var("umafall_relevante_features{}relevant_features_{}.pkl".format(slash, p))
-        y = s.load_var("umafall_relevante_features{}y_{}.pkl".format(slash, p))
-        y = pd.DataFrame(y, columns=[arcma.label_tag])
+        relevant_features = s.load_var("umafall_relevant_features{}relevant_features_{}.pkl".format(slash, p))
+        y = s.load_var("umafall_relevant_features{}y_{}.pkl".format(slash, p))
+        y = pd.DataFrame(y, columns=[umafall.label_tag])
         
         x_train, x_test, y_train, y_test = train_test_split(relevant_features, y, test_size=0.2, random_state=42)
         
