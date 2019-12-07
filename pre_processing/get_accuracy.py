@@ -95,7 +95,8 @@ class Get_Accuracy(object):
         outliers_commons = Outlier_Commons()
         return_accuracy = []
         for activity in y.activity.unique():
-            accuracy_list = []
+            accuracy_list_outlier = []
+            accuracy_list_test = []
             for train_index, test_index in skf.split(data, y):
                 x_train, x_test = data.loc[train_index], data.loc[test_index]
                 y_train, y_test = y.loc[train_index], y.loc[test_index]
@@ -115,10 +116,14 @@ class Get_Accuracy(object):
                     pred = clf.predict_proba(outlier_aux)
                     pred = pd.DataFrame(pred, columns = clf.classes_)
                     index_pred = self.get_indexes_with_valid_predictions(pred, threshold)
-                    accuracy_list.append(1-(len(index_pred)/len(pred)))
+                    accuracy_list_outlier.append(1-(len(index_pred)/len(pred)))
                     
+                    pred = clf.predict_proba(test_aux)
+                    pred = pd.DataFrame(pred, columns = clf.classes_)
+                    index_pred = self.get_indexes_with_valid_predictions(pred, threshold)
+                    accuracy_list_test.append(len(index_pred)/len(pred))
             
-            return_accuracy.append({"Person":person,"Activity Outlier": activity, "Accouracy":st.mean(accuracy_list)})
+            return_accuracy.append({"Person":person,"Activity Outlier": activity, "Accouracy Outlier":st.mean(accuracy_list_outlier), "Accouracy Teste":st.mean(accuracy_list_test)})
         return return_accuracy
                 
             

@@ -25,10 +25,12 @@ get_accuracy = Get_Accuracy()
 #Interate threshold to find de best value#
 persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 accuracy_by_person = pd.DataFrame()
+threshold = 0.75
+project.log("=========== ARCMA StratifiedKFold Accuracy, Thresold = {}===========".format(threshold))
 for p in persons:
     s = save()
-    relevant_features = s.load_var("arcma_relevante_features{}relevant_features_{}.pkl".format(slash, p))
-    y = s.load_var("arcma_relevante_features{}y_{}.pkl".format(slash, p))
+    relevant_features = s.load_var("arcma_relevant_features{}relevant_features_{}.pkl".format(slash, p))
+    y = s.load_var("arcma_relevant_features{}y_{}.pkl".format(slash, p))
     y = pd.DataFrame(y, columns=[arcma.label_tag])
     skf = StratifiedKFold(n_splits=10, random_state=None, shuffle=False)
     
@@ -48,14 +50,14 @@ for p in persons:
         y_train = y_train[train_valid_rows]
         
         extra_trees = ExtraTreesClassifier(n_estimators = 10000, random_state=0)
-        threshold = 0.75
         accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, extra_trees, threshold)
         accuracies.append(accuracy)
-        
+        break
     accuracy_mean = np.mean([a["accuracy"] for a in accuracies])
     discarted_mean = np.mean([a["discarted"] for a in accuracies])
     
     accuracy_by_person = accuracy_by_person.append(pd.DataFrame([{"person": p, "accuracy":accuracy_mean, "discarted":discarted_mean}]))
     
-    print("Person {} - Accuracy Mean: {}".format(p, accuracy_mean))
-    print("Person {} - Discarted Mean: {}".format(p, discarted_mean))    
+    project.log("Person {} - Accuracy Mean: {}".format(p, accuracy_mean))
+    project.log("Person {} - Discarted Mean: {}".format(p, discarted_mean))  
+    break

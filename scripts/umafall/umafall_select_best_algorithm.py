@@ -19,7 +19,7 @@ from scripts.save_workspace import save
 
 #===INITIALIZATION===#
 umafall = UMAFALL_Model()
-classifiers = {"Extratrees": ExtraTreesClassifier(n_estimators = 1000, random_state=0), "Knn":KNeighborsClassifier(n_neighbors=5), "Naive Bayes":GaussianNB(), "RandomForest":RandomForestClassifier(random_state=1), "Decision Tree":tree.DecisionTreeClassifier(), "SVM":svm.SVC(probability=True), "MPL":MLPClassifier(solver='lbfgs', alpha=1e-5, random_state=1)}
+classifiers = {"Extratrees": ExtraTreesClassifier(n_estimators = 100), "Knn":KNeighborsClassifier(n_neighbors=5), "Naive Bayes":GaussianNB(), "RandomForest":RandomForestClassifier(), "Decision Tree":tree.DecisionTreeClassifier(), "SVM":svm.SVC(probability=True), "MPL":MLPClassifier(solver='lbfgs', alpha=1e-5, random_state=1)}
 persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
 get_accuracy = Get_Accuracy()
 project = Project()
