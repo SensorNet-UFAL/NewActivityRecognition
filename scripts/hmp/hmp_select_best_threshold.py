@@ -9,9 +9,9 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from pre_processing.processing_db_files import Processing_DB_Files  
-from utils.project import Project
+from utils.project import Project, slash
 from scripts.save_workspace import save
-import pandas as pd
+import statistics as st
 
 #===INITIALIZATION===#
 Debug.DEBUG = 0
@@ -26,25 +26,28 @@ base_classification = Base_Classification(hmp, extra_trees)
 #Interate threshold to find de best value#
 
 s = save()
-relevant_features = s.load_var("Relevant_features.pkl")
-y = s.load_var("y.pkl")
-y = pd.DataFrame(y, columns=[hmp.label_tag])
-X_train, X_test, y_train, y_test = train_test_split(relevant_features, y, test_size=0.2, random_state=42)
-data = {}
-data["f1"] = {}
-data["f1"]["training"] = {}
-data["f1"]["training"]["training_features"] = X_train
-data["f1"]["training"]["training_labels"] = y_train
-
-data["f1"]["test"] = {}
-data["f1"]["test"]["test_features"] = X_test
-data["f1"]["test"]["test_labels"] = y_test
-
-#return_dataframe, return_accuracy, data_from_each_person = base_classification.get_accuracy.get_outliers_confused_with_activities(data, hmp, extra_trees,0.55)
-accuracy_threshould = pd.DataFrame(columns=["accuracy","discarted", "len_activity", "threshold"])
-for t in np.arange(0.05, 1, 0.05):    
-    return_proba = base_classification.get_accuracy.simple_accuracy_mean_to_each_person_with_proba(data, hmp, extra_trees, t)
-    return_proba = return_proba[list(return_proba.keys())[0]]
-    return_proba["threshold"] = t
-    accuracy_threshould = accuracy_threshould.append(return_proba, ignore_index=True)
-
+person_list = ["f1", "m1", "m2"]
+accuracy_threshould_temp_aux = pd.DataFrame(columns=["accuracy","discarted", "len_activity", "threshold"])
+accuracy_mean = pd.DataFrame(columns=["accuracy","discarted", "len_activity", "threshold"])
+project.log("====================HMP BEST THRESHOLD============================")
+for t in np.arange(0.05, 1, 0.05):
+    accuracy_threshould_temp_aux = pd.DataFrame(columns=["accuracy","discarted", "len_activity"])
+    for p in person_list:
+        relevant_features = s.load_var("hmp_relevant_features{}relevant_features_{}.pkl".format(slash, p))
+        y = s.load_var("hmp_relevant_features{}y_{}.pkl".format(slash, p))
+        y = pd.DataFrame(y, columns=[hmp.label_tag])
+        X_train, X_test, y_train, y_test = train_test_split(relevant_features, y, test_size=0.2, random_state=42)
+        data = {}
+        data[p] = {}
+        data[p]["training"] = {}
+        data[p]["training"]["training_features"] = X_train
+        data[p]["training"]["training_labels"] = y_train
+        data[p]["test"] = {}
+        data[p]["test"]["test_features"] = X_test
+        data[p]["test"]["test_labels"] = y_test
+        return_proba = base_classification.get_accuracy.simple_accuracy_mean_to_each_person_with_proba(data, hmp, extra_trees, t)
+        return_proba = return_proba[list(return_proba.keys())[0]]
+        accuracy_threshould_temp_aux = accuracy_threshould_temp_aux.append(return_proba, ignore_index=True)
+        
+    project.log("Accuracy: {}, Discarted: {}, Len_activity: {}, Threshold: {}".format(st.mean(accuracy_threshould_temp_aux["accuracy"]), st.mean(accuracy_threshould_temp_aux["discarted"]), st.mean(accuracy_threshould_temp_aux["len_activity"])))
+project.log("================================================")
