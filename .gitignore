@@ -1,2 +1,6 @@
 
 workspace/log.log
+
+*.pyc
+
+.spyproject/
