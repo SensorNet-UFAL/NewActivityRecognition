@@ -29,7 +29,7 @@ s = save()
 person_list = ["f1","m1","m2"]
 accuracy_threshould_list = []
 data = {}
-threshold = 0.80
+threshold = 0.35
 project.log("=========== HMP Outlier Accuracy, Thresold = {}===========".format(threshold))
 for p in person_list:
     project.log("===========Person {}===========".format(p))

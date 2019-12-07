@@ -25,7 +25,7 @@ get_accuracy = Get_Accuracy()
 #Interate threshold to find de best value#
 persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 accuracy_by_person = pd.DataFrame()
-threshold = 0.75
+threshold = 0.60
 project.log("=========== ARCMA StratifiedKFold Accuracy, Thresold = {}===========".format(threshold))
 for p in persons:
     s = save()

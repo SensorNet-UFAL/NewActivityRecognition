@@ -32,6 +32,7 @@ skf = StratifiedKFold(n_splits=10, random_state=None, shuffle=False)
 
 accuracy = {}
 accuracies = []
+threshold = 0.35
 for train_index, test_index in skf.split(relevant_features, y):
     print("TRAIN:", train_index, "TEST:", test_index)
     x_train, x_test = relevant_features.loc[train_index], relevant_features.loc[test_index]
@@ -46,7 +47,6 @@ for train_index, test_index in skf.split(relevant_features, y):
     y_train = y_train[train_valid_rows]
     
     extra_trees = ExtraTreesClassifier(n_estimators = 10000, random_state=0)
-    threshold = 0.55
     accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, extra_trees, threshold)
     accuracies.append(accuracy)
     

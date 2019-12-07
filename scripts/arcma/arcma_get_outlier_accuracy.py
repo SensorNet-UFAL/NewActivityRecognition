@@ -29,7 +29,7 @@ s = save()
 person_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 accuracy_threshould_list = []
 data = {}
-threshold = 0.80
+threshold = 0.60
 project.log("=========== ARCMA Outlier Accuracy, Thresold = {}===========".format(threshold))
 for p in person_list:
     project.log("===========Person {}===========".format(p))
