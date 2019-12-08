@@ -42,5 +42,5 @@ for p in person_list:
     print("------------------------------------")
     
     return_accuracy = base_classification.get_accuracy.stratified_kfold_accuracy_outlier(data, y, extra_trees, threshold, p)
-    project.log(str(return_accuracy))
+    project.log(str(return_accuracy), file="hmp_log.log")
 
