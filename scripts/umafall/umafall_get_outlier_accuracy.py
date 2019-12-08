@@ -26,13 +26,13 @@ base_classification = Base_Classification(umafall, extra_trees)
 
 #Interate threshold to find de best value#
 s = save()
-person_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15, 16, 17]
+person_list = [14,15, 16, 17]
 accuracy_threshould_list = []
 data = {}
 threshold = 0.65
-project.log("=========== UMAFALL Outlier Accuracy, Thresold = {}===========".format(threshold))
+project.log("=========== UMAFALL Outlier Accuracy, Thresold = {}===========".format(threshold), file="umafall_log.log")
 for p in person_list:
-    project.log("===========Person {}===========".format(p))
+    project.log("===========Person {}===========".format(p), file="umafall_log.log")
     data = s.load_var("umafall_relevant_features{}relevant_features_{}.pkl".format(slash, p))
     y = s.load_var("umafall_relevant_features{}y_{}.pkl".format(slash, p))
     y = pd.DataFrame(y, columns=[umafall.label_tag])
@@ -41,6 +41,6 @@ for p in person_list:
     print("Person: {}".format(p))
     print("------------------------------------")
     
-    return_accuracy = base_classification.get_accuracy.stratified_kfold_accuracy_outlier(data, y, extra_trees, threshold, p)
+    return_accuracy = base_classification.get_accuracy.stratified_kfold_accuracy_outlier(data, y, extra_trees, threshold, p, column_test=list(data.columns.values)[0])
     project.log(str(return_accuracy), file="umafall_log.log")
 
