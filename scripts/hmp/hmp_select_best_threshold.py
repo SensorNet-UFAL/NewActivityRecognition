@@ -18,7 +18,7 @@ Debug.DEBUG = 0
 hmp = HMP_Model()
 processing = Processing_DB_Files()
 project = Project()
-extra_trees = ExtraTreesClassifier(n_estimators = 10000, random_state=0)
+extra_trees = ExtraTreesClassifier(n_estimators = 1000, random_state=0)
 base_classification = Base_Classification(hmp, extra_trees)
 
 #===LOAD FEATURES===#
