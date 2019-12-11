@@ -19,7 +19,7 @@ from scripts.save_workspace import save
 
 #===INITIALIZATION===#
 hmp = HMP_Model()
-classifiers = {"Extratrees": ExtraTreesClassifier(n_estimators = 100), "Knn":KNeighborsClassifier(n_neighbors=5), "Naive Bayes":GaussianNB(), "RandomForest":RandomForestClassifier(), "Decision Tree":tree.DecisionTreeClassifier(), "SVM":svm.SVC(probability=True), "MPL":MLPClassifier(solver='lbfgs', alpha=1e-5, random_state=1)}
+classifiers = {"Extratrees": ExtraTreesClassifier(n_estimators = 1000), "Knn":KNeighborsClassifier(n_neighbors=5), "Naive Bayes":GaussianNB(), "RandomForest":RandomForestClassifier(n_estimators = 1000), "Decision Tree":tree.DecisionTreeClassifier(), "SVM":svm.SVC(probability=True), "MPL":MLPClassifier(solver='lbfgs', alpha=1e-5, random_state=1)}
 persons = ["f1","m1","m2"]
 get_accuracy = Get_Accuracy()
 project = Project()
