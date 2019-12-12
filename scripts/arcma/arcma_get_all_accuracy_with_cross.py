@@ -17,7 +17,7 @@ Debug.DEBUG = 0
 arcma = ARCMA_Model()
 processing = Processing_DB_Files()
 project = Project()
-extra_trees = ExtraTreesClassifier(n_estimators = 10000, random_state=0)
+extra_trees = ExtraTreesClassifier(n_estimators = 1000, random_state=0)
 get_accuracy = Get_Accuracy()
 
 #===LOAD FEATURES===#
@@ -49,7 +49,7 @@ for p in persons:
         x_train = x_train[train_valid_rows]
         y_train = y_train[train_valid_rows]
         
-        extra_trees = ExtraTreesClassifier(n_estimators = 10000, random_state=0)
+        extra_trees = ExtraTreesClassifier(n_estimators = 1000, random_state=0)
         accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, extra_trees, threshold)
         accuracies.append(accuracy)
         break

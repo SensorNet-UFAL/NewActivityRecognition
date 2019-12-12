@@ -7,6 +7,8 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 import statistics as st
+from sklearn.metrics import plot_confusion_matrix
+import matplotlib.pyplot as plt
 
 
 class Get_Accuracy(object):
@@ -59,6 +61,11 @@ class Get_Accuracy(object):
         accurary = {"accuracy":clf.score(new_x_test, new_y_test), "discarted":(len(pred)-len(valid_indexes))/len(pred), "len_activity":len(new_y_test["activity"].unique())}
         return accurary
         
+    def plot_confusion_matrix(self, x_test, y_test, clf):
+        class_names = y_test.activity.unique()
+        disp = plot_confusion_matrix(clf, x_test, y_test, display_labels=class_names, cmap=plt.cm.Blues, normalize=None)
+        plt.show()
+        print(disp.confusion_matrix)
         
     def get_indexes_with_valid_predictions(self, dataframe_predicions:pd.DataFrame, threshold):
         return_indexes = []
