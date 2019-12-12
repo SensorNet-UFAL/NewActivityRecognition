@@ -26,7 +26,7 @@ base_classification = Base_Classification(hmp, extra_trees)
 #Interate threshold to find de best value#
 
 s = save()
-person_list = ["f1", "m1", "m2"]
+person_list = ["f1", "m1", "m2", "f2", "m3", "f3", "m4", "m5", "m6", "m7", "f4", "m8", "m9", "f5", "m10", "m11"]
 accuracy_threshould_temp_aux = pd.DataFrame(columns=["accuracy","discarted", "len_activity", "threshold"])
 accuracy_mean = pd.DataFrame(columns=["accuracy","discarted", "len_activity", "threshold"])
 project.log("====================HMP BEST THRESHOLD============================", file="hmp_log_best_threshold.log")

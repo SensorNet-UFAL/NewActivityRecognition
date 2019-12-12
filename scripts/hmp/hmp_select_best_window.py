@@ -37,7 +37,7 @@ t = time.time()
 best_model = ExtraTreesClassifier(n_estimators = 1000, random_state=0)
 w_accuracies = pd.DataFrame(columns=["window", "accurary"])
 p = "f1" # pessoa com mais registros
-project.log("=====================HMP_SELECT_BEST_WINDOWS=====================")
+project.log("=====================HMP_SELECT_BEST_WINDOWS=====================", file="hmp_log_best_window.log")
 for w in range(10,110,10):
     print("Load data with window len = {}".format(w))
     data_list_people = hmp.load_training_data_from_list_people(w, [p], remove_outliers=0.05)
@@ -74,11 +74,11 @@ for w in range(10,110,10):
     y_train = y_train[train_valid_rows]
     
     accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, best_model, 0)["accuracy"]
-    project.log("Window = {} | Accouracy = {}".format(w, accuracy))
+    project.log("Window = {} | Accouracy = {}".format(w, accuracy), file="hmp_log_best_window.log")
     #w_accuracies = w_accuracies.append(pd.DataFrame([[w, accuracy]], columns=["window", "accurary"]))
     print("Finish to calc windows = {}".format(w))
     del relevant_features, y2, x_train, x_test, y_train, y_test, test_valid_rows, train_valid_rows, accuracy
-project.log("===============================================================")
+project.log("===============================================================", file="hmp_log_best_window.log")
 #base_classification = Base_Classification(hmp, ExtraTreesClassifier(n_estimators = 1000, random_state=0)) # Best algoritm
 #best_window = base_classification.find_best_window(range(2, 100, 2), [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
 
