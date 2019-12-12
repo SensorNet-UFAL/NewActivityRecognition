@@ -29,7 +29,7 @@ s = save()
 person_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
 accuracy_threshould_temp_aux = pd.DataFrame(columns=["accuracy","discarted", "len_activity", "threshold"])
 accuracy_mean = pd.DataFrame(columns=["accuracy","discarted", "len_activity", "threshold"])
-project.log("====================UMAFALL BEST THRESHOLD============================")
+project.log("====================UMAFALL BEST THRESHOLD============================", file="umafall_log_best_threshold.log")
 for t in np.arange(0.05, 1, 0.05):
     accuracy_threshould_temp_aux = pd.DataFrame(columns=["accuracy","discarted", "len_activity"])
     for p in person_list:
@@ -49,7 +49,7 @@ for t in np.arange(0.05, 1, 0.05):
         return_proba = return_proba[list(return_proba.keys())[0]]
         accuracy_threshould_temp_aux = accuracy_threshould_temp_aux.append(return_proba, ignore_index=True)
         
-    project.log("Accuracy: {}, Discarted: {}, Len_activity: {}, Threshold: {}".format(st.mean(accuracy_threshould_temp_aux["accuracy"]), st.mean(accuracy_threshould_temp_aux["discarted"]), st.mean(accuracy_threshould_temp_aux["len_activity"]), t))
+    project.log("Accuracy: {}, Discarted: {}, Len_activity: {}, Threshold: {}".format(st.mean(accuracy_threshould_temp_aux["accuracy"]), st.mean(accuracy_threshould_temp_aux["discarted"]), st.mean(accuracy_threshould_temp_aux["len_activity"]), t), file="umafall_log_best_threshold.log")
     print("Accuracy: {}, Discarted: {}, Len_activity: {}, Threshold: {}".format(st.mean(accuracy_threshould_temp_aux["accuracy"]), st.mean(accuracy_threshould_temp_aux["discarted"]), st.mean(accuracy_threshould_temp_aux["len_activity"]), t))
 
-project.log("================================================")
+project.log("================================================", file="umafall_log_best_threshold.log")
