@@ -6,9 +6,8 @@ class BalanceData(object):
     def __init__(self):
         super().__init__()
         
-    def balance_data(features, y, threshould=0, y_tag = "activity"):
+    def balance_data(self, features, y, threshould = 0, y_tag = "activity"):
         classes_counts = y[y_tag].value_counts()
-        first_counts = classes_counts
         invalid_classes = list()
         #procurando valores abaixo do threshold
         for index, value in classes_counts.iteritems():
@@ -21,7 +20,7 @@ class BalanceData(object):
         y_new = y.copy()
         y_new = y_new.drop(labels=invalid_indexes)
         classes_counts = y_new[y_tag].value_counts()
-        if len(classes_counts) > 0 and len(first_counts) == len(classes_counts):
+        if len(classes_counts) > 1:
             samples = list()
             for classe, value in classes_counts.iteritems():
                 samples.append(y_new[y_new[y_tag]==classe].sample(classes_counts.min()))

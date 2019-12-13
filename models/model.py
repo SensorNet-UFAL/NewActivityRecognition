@@ -69,6 +69,9 @@ class Model(object):
             list_of_peoples_data[p] = training_test
         self.data_with_window = list_of_peoples_data
         return list_of_peoples_data
+    def load_data_to_tsfresh(self, window_len, people, remove_outliers = 0, additional_where = ""):
+        aux = self.load_training_data_by_people(people, remove_outliers, additional_where = additional_where)
+        return self.slice_by_window_tsfresh(aux)
     #Loading data from all people
     def load_training_data_from_all_people(self, window_len, training_proportion=0.8, seed=1):
         dataset = sqlite3.connect(self.file_path)
@@ -95,7 +98,26 @@ class Model(object):
                 Debug.print_debug(e)
                 break
         return result
-    
+    def slice_by_window_tsfresh(self, dataframe, window_length):
+        index = 0
+        dataframe_len = len(dataframe)
+        result = []
+        window_id = 1
+        y = list()
+        while(index < dataframe_len):
+            try:
+                #print("Step {}".format(window_id))
+                l = dataframe.iloc[index:(index+window_length)]
+                l["id"] = window_id
+                l["time"] = pd.Series(range(index, (index+window_length)), index=l.index)
+                y.append(l["activity"].value_counts(ascending=False).argmax())
+                result.append(l)
+                index = index + window_length
+                window_id +=1
+            except Exception as e:
+                Debug.print_debug(e)
+                break
+        return pd.concat(result), pd.Series(y)
     #Slices the set into training and testing
     def slice_to_training_test(self, dataset, training_proportion=0.8, seed=1):
     
