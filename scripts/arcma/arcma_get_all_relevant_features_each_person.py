@@ -32,4 +32,4 @@ for p in persons:
         relevant_features = extract_relevant_features(data_tsfresh, y, column_id='id', column_sort='time')
         s.save_var(relevant_features, "arcma_relevant_features_fix_window{}relevant_features_{}.pkl".format(slash, p))
         s.save_var(y, "arcma_relevant_features_fix_window{}y_{}.pkl".format(slash, p))
-    break
+
