@@ -63,7 +63,7 @@ class Get_Accuracy(object):
         
     def plot_confusion_matrix(self, x_test, y_test, clf):
         class_names = y_test.activity.unique()
-        disp = plot_confusion_matrix(clf, x_test, y_test, display_labels=class_names, cmap=plt.cm.Blues, normalize=None)
+        disp = plot_confusion_matrix(clf, x_test, y_test, display_labels=class_names, cmap=plt.cm.Blues, normalize=None, xticks_rotation="vertical")
         plt.show()
         print(disp.confusion_matrix)
         

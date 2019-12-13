@@ -18,8 +18,9 @@ processing = Processing_DB_Files()
 project = Project()
 extra_trees = ExtraTreesClassifier(n_estimators = 1000, max_depth=1000, random_state=0) #Good performer
 s = save()
-p_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-data_list_people = umafall.load_training_data_from_list_people(20, p_list, remove_outliers=0.05, additional_where="and sensor=2 and body=3") # select magnetometer in waist - best accuracy
+
+data_list_people = umafall.load_training_data_from_list_people(10, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17], remove_outliers=0.05, additional_where="and sensor=2 and body=3")# Janela Fixa  # select magnetometer in waist - best accuracy
+#data_list_people = umafall.load_training_data_from_list_people(20, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17], remove_outliers=0.05, additional_where="and sensor=2 and body=3")# Janela encontrada # select magnetometer in waist - best accuracy
 
 
 for p in data_list_people: 
@@ -45,7 +46,7 @@ for p in data_list_people:
     y2.index+= 1
 
     relevant_features = extract_relevant_features(dataframe_3, y2, column_id='id', column_sort='time')
-    s.save_var(relevant_features, "umafall_relevant_features{}relevant_features_{}.pkl".format(slash, p))
-    s.save_var(y2, "umafall{}y_{}.pkl".format(slash, p))
+    s.save_var(relevant_features, "umafall_relevant_features_fix_window{}relevant_features_{}.pkl".format(slash, p))
+    s.save_var(y2, "umafall_relevant_features_fix_window{}y_{}.pkl".format(slash, p))
 
 
