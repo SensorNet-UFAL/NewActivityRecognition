@@ -110,7 +110,7 @@ class Model(object):
                 l = dataframe.iloc[index:(index+window_length)]
                 l["id"] = window_id
                 l["time"] = pd.Series(range(index, (index+window_length)), index=l.index)
-                y.append(l["activity"].value_counts(ascending=False).argmax())
+                y.append(l["activity"].value_counts(ascending=False).idxmax())
                 result.append(l)
                 index = index + window_length
                 window_id +=1
