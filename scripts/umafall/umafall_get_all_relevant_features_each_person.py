@@ -44,9 +44,10 @@ for p in data_list_people:
     del y
 
     y2.index+= 1
-
-    relevant_features = extract_relevant_features(dataframe_3, y2, column_id='id', column_sort='time')
-    s.save_var(relevant_features, "umafall_relevant_features_fix_window{}relevant_features_{}.pkl".format(slash, p))
-    s.save_var(y2, "umafall_relevant_features_fix_window{}y_{}.pkl".format(slash, p))
+    classes_counts = y2["activity"].value_counts()
+    if len(classes_counts) > 1:
+        relevant_features = extract_relevant_features(dataframe_3, y2, column_id='id', column_sort='time')
+        s.save_var(relevant_features, "umafall_relevant_features_fix_window{}relevant_features_{}.pkl".format(slash, p))
+        s.save_var(y2, "umafall_relevant_features_fix_window{}y_{}.pkl".format(slash, p))
 
 
