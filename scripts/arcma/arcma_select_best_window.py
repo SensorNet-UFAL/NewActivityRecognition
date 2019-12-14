@@ -28,7 +28,7 @@ best_model = ExtraTreesClassifier(n_estimators = 1000, random_state=0)
 w_accuracies = pd.DataFrame(columns=["window", "accurary"])
 p = 15 # pessoa com mais registros
 project.log("=====================ARCMA_SELECT_BEST_WINDOWS=====================", file="arcma_log_best_window.log")
-for w in range(10,110,10):
+for w in range(20,110,10):
     
     print("Load data with window len = {}".format(w))
     data = arcma.load_training_data_by_people(p)
@@ -57,7 +57,6 @@ for w in range(10,110,10):
             accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, best_model, 0)["accuracy"]
             project.log("Window = {} | Accouracy = {}".format(w, accuracy), file="arcma_log_best_window.log")
             print("Finish to calc windows = {}".format(w))
-            del relevant_features, y2, x_train, x_test, y_train, y_test, test_valid_rows, train_valid_rows, accuracy, balanced_data
 
 project.log("===============================================================", file="arcma_log_best_window.log")
 
