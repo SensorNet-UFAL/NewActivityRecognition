@@ -64,7 +64,7 @@ for c in classifiers:
 
             accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, classifiers[c], 0)["accuracy"]
             person_accuracies.append(accuracy)
-            break
+            
 
     project.log("Classifier = {} | Accuracy = {}".format(type(classifiers[c]).__name__, st.mean(person_accuracies)), file="umafall_best_algorithm.log")
-    break
+    
