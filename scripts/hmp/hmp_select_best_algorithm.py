@@ -31,7 +31,7 @@ classifiers = {"Extratrees": ExtraTreesClassifier(n_estimators = 1000), "Knn":KN
 persons = ["f1", "m1", "m2", "f2", "m3", "f3", "m4", "m5", "m6", "m7", "f4", "m8", "m9", "f5", "m10", "m11"]
 get_accuracy = Get_Accuracy()
 balance_data = BalanceData()
-threshold_balance_data = 100
+threshold_balance_data = 40
 #Select the best classifier
 accuracy_mean = pd.DataFrame(columns=["Classifier", "Accuracy"])
 project.log("=====================HMP_SELECT_BEST_ALGORITHM=====================", file="hmp_best_algorithm.log")

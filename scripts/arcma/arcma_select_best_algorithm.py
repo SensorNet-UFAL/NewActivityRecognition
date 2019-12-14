@@ -31,7 +31,7 @@ classifiers = {"Extratrees": ExtraTreesClassifier(n_estimators = 1000), "Knn":KN
 persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 get_accuracy = Get_Accuracy()
 balance_data = BalanceData()
-threshold_balance_data = 100
+threshold_balance_data = 40
 #Select the best classifier
 accuracy_mean = pd.DataFrame(columns=["Classifier", "Accuracy"])
 project.log("=====================ARCMA_SELECT_BEST_ALGORITHM=====================", file="arcma_best_algorithm.log")
