@@ -58,7 +58,11 @@ for w in range(10,110,10):
             project.log("Window = {} | Accouracy = {}".format(w, accuracy), file="umafall_log_best_window.log")
             print("Finish to calc windows = {}".format(w))
             del x_train, x_test, y_train, y_test, test_valid_rows, train_valid_rows, accuracy
+        else:
+            project.log("Window {} | balanced_data is not tuple".format(w), file="umafall_log_best_window.log")
         del relevant_features, y
+    else:
+        project.log("Window {} | classes_counts = {}".format(w, classes_counts), file="umafall_log_best_window.log")
     del data, data_tsfresh
 
 project.log("===============================================================", file="umafall_log_best_window.log")
