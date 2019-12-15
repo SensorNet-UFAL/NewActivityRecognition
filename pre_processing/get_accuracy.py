@@ -42,7 +42,9 @@ class Get_Accuracy(object):
             valid_data_from_each_person[p]["test"]["test_labels"] = person_data['test']['test_labels'].iloc[valid_indexes,:]
             
             #clf.fit(valid_data_from_each_person[p]['training']['training_features'], valid_data_from_each_person[p]['training']['training_labels'])
-            accuracies[p] = {"accuracy":clf.score(valid_data_from_each_person[p]['test']['test_features'], valid_data_from_each_person[p]['test']['test_labels']),"discarted":(len(pred)-len(valid_indexes))/len(pred), "len_activity":len(valid_data_from_each_person[p]["test"]["test_labels"]["activity"].unique())}
+            len_activity_before = len(person_data["test"]["test_labels"]["activity"].unique())
+            len_activity_after = len(valid_data_from_each_person[p]["test"]["test_labels"]["activity"].unique())
+            accuracies[p] = {"accuracy":clf.score(valid_data_from_each_person[p]['test']['test_features'], valid_data_from_each_person[p]['test']['test_labels']),"discarted":(len(pred)-len(valid_indexes))/len(pred), "discarted_activity":(len_activity_before-len_activity_after)}
             
         return accuracies
     
