@@ -13,11 +13,9 @@ arcma = ARCMA_Model()
 processing = Processing_DB_Files()
 project = Project()
 s = save()
-window = 26 # Janela Fixa
+#window = 26 # Janela Fixa
+window = 50 # Melhor Janela
 persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-#data_list_people = arcma.load_training_data_from_list_people(26, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], remove_outliers=0.05) # Janela Fixa
-#data_list_people = arcma.load_training_data_from_list_people(40, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], remove_outliers=0.05) # Janela encontrada
-
 
 for p in persons: 
     
