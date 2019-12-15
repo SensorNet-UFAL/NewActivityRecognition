@@ -57,6 +57,8 @@ for w in range(10,110,10):
             accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, best_model, 0)["accuracy"]
             project.log("Window = {} | Accouracy = {}".format(w, accuracy), file="hmp_log_best_window.log")
             print("Finish to calc windows = {}".format(w))
-
+            del x_train, x_test, y_train, y_test, test_valid_rows, train_valid_rows, accuracy
+        del relevant_features, y
+    del data, data_tsfresh
 project.log("===============================================================", file="hmp_log_best_window.log")
 
