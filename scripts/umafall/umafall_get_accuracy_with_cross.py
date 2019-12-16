@@ -3,7 +3,7 @@
 # IMPORTS #
 from utils.debug import Debug
 from sklearn.ensemble import ExtraTreesClassifier # Extra Trees
-from models.hmp_model import HMP_Model
+from models.umafall_model import UMAFALL_Model 
 import pandas as pd
 from pre_processing.processing_db_files import Processing_DB_Files  
 from utils.project import Project, slash
@@ -15,26 +15,26 @@ import numpy as np
 
 #===INITIALIZATION===#
 Debug.DEBUG = 0
-hmp = HMP_Model()
+umafall = UMAFALL_Model()
 processing = Processing_DB_Files()
 project = Project()
 extra_trees = ExtraTreesClassifier(n_estimators = 1000, random_state=0)
 get_accuracy = Get_Accuracy()
 balance_data = BalanceData()
-threshold_balance_data = 40
+threshold_balance_data = 45
 
 #===LOAD FEATURES===#
 
 #Interate threshold to find de best value#
-persons = ["f1", "m1", "m2", "f2", "m3", "f3", "m4", "m5", "m6", "m7", "f4", "m8", "m9", "f5", "m10", "m11"]
+persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 accuracy_by_person = pd.DataFrame()
-threshold = 0.65
-project.log("=========== HMP StratifiedKFold Accuracy, Thresold = {}===========".format(threshold), file="hmp_log_final_accuracy.log")
+threshold = 0.4
+project.log("=========== UMAFALL StratifiedKFold Accuracy, Thresold = {}===========".format(threshold), file="umafall_log_final_accuracy.log")
 for p in persons:
     s = save()
-    relevant_features = s.load_var("hmp_relevant_features_best_window{}relevant_features_{}.pkl".format(slash, p))
-    y = s.load_var("hmp_relevant_features_best_window{}y_{}.pkl".format(slash, p))
-    y = pd.DataFrame(y, columns=[hmp.label_tag])
+    relevant_features = s.load_var("umafall_relevant_features_best_window{}relevant_features_{}.pkl".format(slash, p))
+    y = s.load_var("umafall_relevant_features_best_window{}y_{}.pkl".format(slash, p))
+    y = pd.DataFrame(y, columns=[umafall.label_tag])
     skf = StratifiedKFold(n_splits=10, random_state=None, shuffle=False)
     
     accuracy = {}
@@ -63,4 +63,4 @@ for p in persons:
     
     accuracy_by_person = accuracy_by_person.append(pd.DataFrame([{"person": p, "accuracy":accuracy_mean, "discarted":discarted_mean}]))
     
-    project.log("Person {} - Accuracy Mean: {} | Discarted Mean: {}".format(p, accuracy_mean,discarted_mean), file="hmp_log_final_accuracy.log")
+    project.log("Person {} - Accuracy Mean: {} | Discarted Mean: {}".format(p, accuracy_mean,discarted_mean), file="umafall_log_final_accuracy.log")

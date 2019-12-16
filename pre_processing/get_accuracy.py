@@ -99,19 +99,18 @@ class Get_Accuracy(object):
                 return_outlier["outlier pred"] = counter.most_common(1)[0][0]
                 return return_outlier
             
-    def stratified_kfold_accuracy_outlier(self, data, y, clf, threshold, person, column_test="y__quantile__q_0.8"):
-        skf = StratifiedKFold(n_splits=10, random_state=None, shuffle=False)
+    def stratified_kfold_accuracy_outlier(self, data, y, clf, threshold, person):
+        skf = StratifiedKFold(n_splits=5, random_state=0, shuffle=False)
         outliers_commons = Outlier_Commons()
         return_accuracy = []
         for activity in y.activity.unique():
             accuracy_list_outlier = []
             accuracy_list_test = []
             for train_index, test_index in skf.split(data, y):
-                x_train, x_test = data.loc[train_index], data.loc[test_index]
-                y_train, y_test = y.loc[train_index], y.loc[test_index]
-                
-                test_valid_rows = np.isfinite(x_test[column_test])
-                train_valid_rows = np.isfinite(x_train[column_test])
+                x_train, x_test = data.iloc[train_index,:], data.iloc[test_index,:]
+                y_train, y_test = y.iloc[train_index,:], y.iloc[test_index,:]
+                test_valid_rows = np.isfinite(x_test[list(x_test.columns)[0]])
+                train_valid_rows = np.isfinite(x_train[list(x_train.columns)[0]])
                 
                 x_test = x_test[test_valid_rows]
                 y_test = y_test[test_valid_rows]

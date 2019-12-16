@@ -15,7 +15,7 @@ project = Project()
 s = save()
 #window = 10 # Janela Fixa
 window = 30 # Melhor Janela
-persons = [15,16,17]
+persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
 for p in persons: 
     
