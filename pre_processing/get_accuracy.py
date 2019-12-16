@@ -66,7 +66,7 @@ class Get_Accuracy(object):
     def plot_confusion_matrix(self, x_test, y_test, clf):
         class_names = y_test.activity.unique()
         disp = plot_confusion_matrix(clf, x_test, y_test, display_labels=class_names, cmap=plt.cm.Blues, normalize=None, xticks_rotation="vertical")
-        plt.show()
+        disp.figure_.set_size_inches(18.5, 10.5, forward=True)
         print(disp.confusion_matrix)
         
     def get_indexes_with_valid_predictions(self, dataframe_predicions:pd.DataFrame, threshold):

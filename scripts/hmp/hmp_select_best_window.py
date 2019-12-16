@@ -18,7 +18,6 @@ Debug.DEBUG = 0
 hmp = HMP_Model()
 processing = Processing_DB_Files()
 project = Project()
-persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 get_accuracy = Get_Accuracy()
 balance_data = BalanceData()
 threshold_balance_data = 40
