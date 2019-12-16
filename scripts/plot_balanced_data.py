@@ -53,6 +53,17 @@ def plot_hmp():
     balanced_data = balance_data.balance_data(relevant_features, y, threshold_balance_data)
     #plot_hist(relevant_features, y, 'Base HMP desbalanceada.')
     plot_hist(balanced_data[0], balanced_data[1], 'Base HMP Balanceada.')
+    
+#====UMAFALL====#
+def plot_umafall():
+    umafall = UMAFALL_Model()
+    p=1
+    relevant_features = s.load_var("umafall_relevant_features_best_window{}relevant_features_{}.pkl".format(slash, p))
+    y = s.load_var("umafall_relevant_features_best_window{}y_{}.pkl".format(slash, p))
+    y = pd.DataFrame(y, columns=[umafall.label_tag])
+    balanced_data = balance_data.balance_data(relevant_features, y, threshold_balance_data)
+    #plot_hist(relevant_features, y, 'Base HMP desbalanceada.')
+    plot_hist(balanced_data[0], balanced_data[1], 'Base HMP Balanceada.')
 
 
-plot_hmp()
+plot_umafall()
