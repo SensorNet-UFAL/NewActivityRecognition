@@ -21,14 +21,14 @@ project = Project()
 extra_trees = ExtraTreesClassifier(n_estimators = 1000, random_state=0)
 get_accuracy = Get_Accuracy()
 balance_data = BalanceData()
-threshold_balance_data = 45
+threshold_balance_data = 40
 
 #===LOAD FEATURES===#
 
 #Interate threshold to find de best value#
 persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 accuracy_by_person = pd.DataFrame()
-threshold = 0.4
+threshold = 0.45
 project.log("=========== UMAFALL StratifiedKFold Accuracy, Thresold = {}===========".format(threshold), file="umafall_log_final_accuracy.log")
 for p in persons:
     s = save()
