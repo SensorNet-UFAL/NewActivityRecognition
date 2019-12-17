@@ -15,13 +15,17 @@ project = Project()
 s = save()
 window = 10 # Janela Fixa
 #window = 30 # Melhor Janela
-persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+#persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+persons = [7,8,9,10,11,12,13,14,15]
 
 for p in persons: 
     
     data = umafall.load_training_data_by_people(p, additional_where = "and body=2 and sensor=2") #MAGNETOMETER in WAIST
     print("Slicing Window....")
     data_tsfresh, y = umafall.slice_by_window_tsfresh(data, window)
+    if data_tsfresh is None:
+        continue
+    
     y.index += 1
     del data_tsfresh["activity"]
     

@@ -35,8 +35,8 @@ for t in np.arange(0.05, 1, 0.05):
     accuracy_threshould_temp_aux = pd.DataFrame(columns=["accuracy","discarted", "len_activity"])
     for p in person_list:
         try:
-            relevant_features = s.load_var("umafall_relevant_features_best_window{}relevant_features_{}.pkl".format(slash, p))
-            y = s.load_var("umafall_relevant_features_best_window{}y_{}.pkl".format(slash, p))
+            relevant_features = s.load_var("umafall_relevant_features_best_window_new{}relevant_features_{}.pkl".format(slash, p))
+            y = s.load_var("umafall_relevant_features_best_window_new{}y_{}.pkl".format(slash, p))
             y = pd.DataFrame(y, columns=[umafall.label_tag])
         except:
             continue

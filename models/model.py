@@ -117,7 +117,10 @@ class Model(object):
             except Exception as e:
                 Debug.print_debug(e)
                 break
-        return pd.concat(result), pd.Series(y)
+        if len(result) > 1:
+            return pd.concat(result), pd.Series(y)
+        else:
+            return None, None
     #Slices the set into training and testing
     def slice_to_training_test(self, dataset, training_proportion=0.8, seed=1):
     

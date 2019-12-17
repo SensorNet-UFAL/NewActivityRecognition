@@ -31,7 +31,7 @@ project.log("=====================UMAFALL_SELECT_BEST_WINDOWS===================
 for w in range(10,110,10):
     
     print("Load data with window len = {}".format(w))
-    data = umafall.load_training_data_by_people(p, additional_where="and sensor=2 and body=3")
+    data = umafall.load_training_data_by_people(p, additional_where="and sensor=2 and body=2")
     print("Slicing Window....")
     data_tsfresh, y = umafall.slice_by_window_tsfresh(data, w)
     y.index += 1
