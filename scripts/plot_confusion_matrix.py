@@ -83,7 +83,7 @@ def plot_hmp():
 def umafall():
     umafall = UMAFALL_Model()
     p=1
-    umafall_threshold_classification = 0.65
+    umafall_threshold_classification = 0.45
     relevant_features = s.load_var("umafall_relevant_features_best_window{}relevant_features_{}.pkl".format(slash, p))
     y = s.load_var("umafall_relevant_features_best_window{}y_{}.pkl".format(slash, p))
     y = pd.DataFrame(y, columns=[umafall.label_tag])
@@ -91,8 +91,8 @@ def umafall():
     plot_confusion_matrix(umafall, balanced_data[0], balanced_data[1], umafall_threshold_classification)
     
 #plot_hmp()
-plot_arcma()
-
+#plot_arcma()
+umafall()
 
 
 

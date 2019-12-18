@@ -13,10 +13,10 @@ umafall = UMAFALL_Model()
 processing = Processing_DB_Files()
 project = Project()
 s = save()
-window = 10 # Janela Fixa
-#window = 30 # Melhor Janela
-#persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-persons = [7,8,9,10,11,12,13,14,15]
+#window = 10 # Janela Fixa
+window = 30 # Melhor Janela
+persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+#persons = [7,8,9,10,11,12,13,14,15]
 
 for p in persons: 
     
@@ -32,6 +32,6 @@ for p in persons:
     classes_counts = y.value_counts()
     if len(classes_counts) > 1:
         relevant_features = extract_relevant_features(data_tsfresh, y, column_id='id', column_sort='time')
-        s.save_var(relevant_features, "umafall_relevant_features_best_window_new{}relevant_features_{}.pkl".format(slash, p))
-        s.save_var(y, "umafall_relevant_features_best_window_new{}y_{}.pkl".format(slash, p))
+        s.save_var(relevant_features, "umafall_relevant_features_best_window{}relevant_features_{}.pkl".format(slash, p))
+        s.save_var(y, "umafall_relevant_features_best_window{}y_{}.pkl".format(slash, p))
 
