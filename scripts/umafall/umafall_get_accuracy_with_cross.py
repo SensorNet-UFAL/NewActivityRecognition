@@ -28,7 +28,7 @@ threshold_balance_data = 40
 #Interate threshold to find de best value#
 persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 accuracy_by_person = pd.DataFrame()
-threshold = 0.45
+threshold = 0.55
 project.log("=========== UMAFALL StratifiedKFold Accuracy, Thresold = {}===========".format(threshold), file="umafall_log_final_accuracy.log")
 for p in persons:
     s = save()
