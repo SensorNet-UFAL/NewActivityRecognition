@@ -42,8 +42,8 @@ for c in classifiers:
     for p in persons:
         s = save()
         try:
-            relevant_features = s.load_var("arcma_relevant_features_fix_window{}relevant_features_{}.pkl".format(slash, p))
-            y = s.load_var("arcma_relevant_features_fix_window{}y_{}.pkl".format(slash, p))
+            relevant_features = s.load_var("arcma_relevant_features_best_window{}relevant_features_{}.pkl".format(slash, p))
+            y = s.load_var("arcma_relevant_features_best_window{}y_{}.pkl".format(slash, p))
             y = pd.DataFrame(y, columns=[arcma.label_tag])
         except:
             print("file from person {} not found!".format(p))

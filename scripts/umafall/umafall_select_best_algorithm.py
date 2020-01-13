@@ -43,8 +43,8 @@ for c in classifiers:
     for p in persons:
         s = save()
         try:
-            relevant_features = s.load_var("umafall_relevant_features_best_window_new{}relevant_features_{}.pkl".format(slash, p))
-            y = s.load_var("umafall_relevant_features_best_window_new{}y_{}.pkl".format(slash, p))
+            relevant_features = s.load_var("umafall_relevant_features_best_window{}relevant_features_{}.pkl".format(slash, p))
+            y = s.load_var("umafall_relevant_features_best_window{}y_{}.pkl".format(slash, p))
             y = pd.DataFrame(y, columns=[umafall.label_tag])
         except:
             print("file from person {} not found!".format(p))
