@@ -9,6 +9,7 @@ from sklearn.model_selection import StratifiedKFold
 import statistics as st
 from sklearn.metrics import plot_confusion_matrix
 import matplotlib.pyplot as plt
+import time
 
 
 class Get_Accuracy(object):
@@ -60,7 +61,11 @@ class Get_Accuracy(object):
         valid_indexes = self.get_indexes_with_valid_predictions(pred, threshold)
         new_x_test = x_test.iloc[valid_indexes,:]
         new_y_test = y_test.iloc[valid_indexes,:]
-        accurary = {"accuracy":clf.score(new_x_test, new_y_test), "discarted":(len(pred)-len(valid_indexes))/len(pred), "len_activity":len(new_y_test["activity"].unique())}
+        start_time = time.time()
+        accuracy = clf.score(new_x_test, new_y_test)
+        end_time = time.time()
+        spent_time = (end_time-start_time)/len(x_test)
+        accurary = {"accuracy":accuracy, "discarted":(len(pred)-len(valid_indexes))/len(pred), "len_activity":len(new_y_test["activity"].unique()), "spent_time":spent_time}
         return accurary
         
     def plot_confusion_matrix(self, x_test, y_test, clf):

@@ -63,12 +63,13 @@ for c in classifiers:
             x_train = x_train[train_valid_rows]
             y_train = y_train[train_valid_rows]
 
-            start_time = time.time()
-            accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, classifiers[c], 0)["accuracy"]
-            end_time = time.time()
+            return_simple_accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, classifiers[c], 0)
+            accuracy = return_simple_accuracy["accuracy"]
+            spent_time = return_simple_accuracy["spent_time"]
             person_accuracies.append(accuracy)
-            times_to_predict.append((end_time-start_time)/len(x_test))
+            times_to_predict.append(spent_time)
             
+            break
 
-    project.log("Classifier = {} | Accuracy = {} | Time: {}".format(type(classifiers[c]).__name__, st.mean(person_accuracies), st.mean(times_to_predict)), file="umafall_best_algorithm.log")
+    project.log("Classifier = {} | Accuracy = {} | Time: {}".format(type(classifiers[c]).__name__, st.mean(person_accuracies), st.mean(times_to_predict)), file="hmp_best_algorithm.log")
     
