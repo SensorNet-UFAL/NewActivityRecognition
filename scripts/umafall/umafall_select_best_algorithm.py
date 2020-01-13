@@ -20,6 +20,7 @@ from scripts.save_workspace import save
 import numpy as np
 from pre_processing.balance_data import BalanceData
 import statistics as st
+import time
 
 
 #===INITIALIZATION===#
@@ -38,6 +39,7 @@ project.log("=====================UMAFALL_SELECT_BEST_ALGORITHM=================
 for c in classifiers:
     print(c)
     person_accuracies = []
+    times_to_predict = []
     for p in persons:
         s = save()
         try:
@@ -61,10 +63,13 @@ for c in classifiers:
             y_test = y_test[test_valid_rows]
             x_train = x_train[train_valid_rows]
             y_train = y_train[train_valid_rows]
-
+            start_time = time.time()
             accuracy = get_accuracy.simple_accuracy_with_valid_predictions(x_train, x_test, y_train, y_test, classifiers[c], 0)["accuracy"]
+            end_time = time.time()
             person_accuracies.append(accuracy)
+            times_to_predict.append((end_time-start_time)/len(x_test))
             
+            break
 
-    project.log("Classifier = {} | Accuracy = {}".format(type(classifiers[c]).__name__, st.mean(person_accuracies)), file="umafall_best_algorithm.log")
+    project.log("Classifier = {} | Accuracy = {} | Time: {}".format(type(classifiers[c]).__name__, st.mean(person_accuracies), st.mean(times_to_predict)), file="umafall_best_algorithm.log")
     
