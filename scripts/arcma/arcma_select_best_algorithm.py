@@ -19,7 +19,6 @@ from scripts.save_workspace import save
 import numpy as np
 from pre_processing.balance_data import BalanceData
 import statistics as st
-import time
 
 
 #===INITIALIZATION===#
@@ -68,8 +67,6 @@ for c in classifiers:
             spent_time = return_simple_accuracy["spent_time"]
             person_accuracies.append(accuracy)
             times_to_predict.append(spent_time)
-            
-            break
 
     project.log("Classifier = {} | Accuracy = {} | Time: {}".format(type(classifiers[c]).__name__, st.mean(person_accuracies), st.mean(times_to_predict)), file="arcma_best_algorithm.log")
     

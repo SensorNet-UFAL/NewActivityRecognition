@@ -12,7 +12,6 @@ from sklearn.ensemble import RandomForestClassifier # Random Forest
 from sklearn.ensemble import ExtraTreesClassifier # Extra Trees
 from sklearn.naive_bayes import GaussianNB #Naive Bayes
 from sklearn import svm #SVM
-from sklearn.neural_network import MLPClassifier #multi-layer perceptro
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from pre_processing.get_accuracy import Get_Accuracy
@@ -68,8 +67,6 @@ for c in classifiers:
             spent_time = return_simple_accuracy["spent_time"]
             person_accuracies.append(accuracy)
             times_to_predict.append(spent_time)
-            
-            break
 
     project.log("Classifier = {} | Accuracy = {} | Time: {}".format(type(classifiers[c]).__name__, st.mean(person_accuracies), st.mean(times_to_predict)), file="umafall_best_algorithm.log")
     
