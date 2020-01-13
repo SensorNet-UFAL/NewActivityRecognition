@@ -64,7 +64,7 @@ class Get_Accuracy(object):
         start_time = time.time()
         accuracy = clf.score(new_x_test, new_y_test)
         end_time = time.time()
-        spent_time = (end_time-start_time)/len(x_test)
+        spent_time = (end_time-start_time)/x_test.shape[0]
         accurary = {"accuracy":accuracy, "discarted":(len(pred)-len(valid_indexes))/len(pred), "len_activity":len(new_y_test["activity"].unique()), "spent_time":spent_time}
         return accurary
         
