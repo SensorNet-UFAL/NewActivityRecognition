@@ -1,6 +1,6 @@
 
 workspace/log.log
-
 *.pyc
-
 .spyproject/
+*.pkl
+*.db

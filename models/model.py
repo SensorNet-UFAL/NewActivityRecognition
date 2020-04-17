@@ -108,6 +108,7 @@ class Model(object):
             try:
                 #print("Step {}".format(window_id))
                 l = dataframe.iloc[index:(index+window_length)]
+                print("L Shape: "+str(l.shape))
                 l["id"] = window_id
                 l["time"] = pd.Series(range(index, (index+window_length)), index=l.index)
                 y.append(l["activity"].value_counts(ascending=False).idxmax())
@@ -115,7 +116,7 @@ class Model(object):
                 index = index + window_length
                 window_id +=1
             except Exception as e:
-                Debug.print_debug(e)
+                Debug.print_debug("Error except: "+str(e))
                 break
         if len(result) > 1:
             return pd.concat(result), pd.Series(y)

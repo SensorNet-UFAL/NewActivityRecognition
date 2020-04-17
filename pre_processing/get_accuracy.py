@@ -10,6 +10,8 @@ import statistics as st
 from sklearn.metrics import plot_confusion_matrix
 import matplotlib.pyplot as plt
 import time
+from sklearn.metrics import precision_recall_fscore_support
+from sklearn.metrics import accuracy_score
 
 
 class Get_Accuracy(object):
@@ -49,6 +51,60 @@ class Get_Accuracy(object):
             
         return accuracies
     
+    
+    ### COMEÇAR DAKI, TESTA NA FUNÇÃO
+    def get_accuracy_cross(self, clf, relevant_features, y, n_to_split=5, threshold=0):
+        accuracies = []
+        precisions = []
+        recalls = []
+        f_scores = []
+        discarteds = []
+        len_activities = []
+        spent_times = []
+        skf = StratifiedKFold(n_splits=n_to_split, random_state=1, shuffle=False)
+        for train_index, test_index in skf.split(relevant_features, y):
+            
+            x_train, x_test = relevant_features.loc[train_index], relevant_features.loc[test_index]
+            y_train, y_test = y.loc[train_index], y.loc[test_index]
+            
+            test_valid_rows = np.isfinite(x_test[list(x_test.columns)[0]])
+            train_valid_rows = np.isfinite(x_train[list(x_train.columns)[0]])
+            
+            x_test = x_test[test_valid_rows]
+            y_test = y_test[test_valid_rows]
+            x_train = x_train[train_valid_rows]
+            y_train = y_train[train_valid_rows]
+            
+            #Getting unique labels to the data
+            clf.classes_ = y_test.activity.unique()
+            #Fit model
+            clf.fit(x_train, y_train)
+            #Getting the probability table
+            pred = clf.predict_proba(x_test)
+            pred = pd.DataFrame(pred, columns = clf.classes_)
+            #Filtering data with probability greater than the threshold
+            valid_indexes = self.get_indexes_with_valid_predictions(pred, threshold)
+            new_x_test = x_test.iloc[valid_indexes,:]
+            new_y_test = y_test.iloc[valid_indexes,:]
+            start_time = time.time()
+            pred = clf.predict(new_x_test)
+            #accuracy = clf.score(new_x_test, new_y_test)
+            end_time = time.time()
+            spent_time = (end_time-start_time)/x_test.shape[0]
+            #Calculating F-score
+            accuracy = accuracy_score(new_y_test, pred)
+            m = precision_recall_fscore_support(new_y_test, pred, average='weighted')
+            
+            accuracies.append(accuracy)
+            precisions.append(m[0])
+            recalls.append(m[1])
+            f_scores.append(m[2])
+            discarteds.append((len(pred)-len(valid_indexes))/len(pred))
+            len_activities.append(len(new_y_test["activity"].unique()))
+            spent_times.append(spent_time)
+            
+        return {"accuracy":st.mean(accuracies), "precision":st.mean(precisions), "recall":st.mean(recalls), "f-scores":st.mean(f_scores), "discarteds":st.mean(discarteds), "len_activity":st.mean(len_activities), "spent_time": st.mean(spent_times)}
+    
     def simple_accuracy_with_valid_predictions(self, x_train, x_test, y_train, y_test, clf, threshold):
         #Getting unique labels to the data
         clf.classes_ = y_test.activity.unique()
@@ -62,10 +118,16 @@ class Get_Accuracy(object):
         new_x_test = x_test.iloc[valid_indexes,:]
         new_y_test = y_test.iloc[valid_indexes,:]
         start_time = time.time()
-        accuracy = clf.score(new_x_test, new_y_test)
+        pred = clf.predict(new_x_test)
+        #accuracy = clf.score(new_x_test, new_y_test)
         end_time = time.time()
         spent_time = (end_time-start_time)/x_test.shape[0]
-        accurary = {"accuracy":accuracy, "discarted":(len(pred)-len(valid_indexes))/len(pred), "len_activity":len(new_y_test["activity"].unique()), "spent_time":spent_time}
+        
+        #Calculating F-score
+        accuracy = accuracy_score(new_y_test, pred)
+        m = precision_recall_fscore_support(new_y_test, pred, average='weighted')
+        
+        accurary = {"accuracy":accuracy, "discarted":(len(pred)-len(valid_indexes))/len(pred), "len_activity":len(new_y_test["activity"].unique()), "spent_time":spent_time, "metrics":m}
         return accurary
         
     def plot_confusion_matrix(self, x_test, y_test, clf):
