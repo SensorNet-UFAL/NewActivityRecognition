@@ -31,9 +31,14 @@ hmp_persons = ["f1", "m1", "m2", "f2", "m3", "f3", "m4", "f4"] # at least 5 acti
 umafall_persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
 arcma_persons = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 models = []
-models.append({"model_name":"hmp", "model":HMP_Model(), "persons":hmp_persons, "window":16})
-models.append({"model_name":"umafall", "model":UMAFALL_Model(), "persons":umafall_persons, "window":10})
-models.append({"model_name":"arcma", "model":ARCMA_Model(), "persons":arcma_persons, "window":26})
+#Round 01
+#models.append({"model_name":"hmp", "model":HMP_Model(), "persons":hmp_persons, "window":16})
+#models.append({"model_name":"umafall", "model":UMAFALL_Model(), "persons":umafall_persons, "window":10})
+#models.append({"model_name":"arcma", "model":ARCMA_Model(), "persons":arcma_persons, "window":26})
+#Round 02
+models.append({"model_name":"hmp", "model":HMP_Model(), "persons":hmp_persons, "window":90})
+#models.append({"model_name":"umafall", "model":UMAFALL_Model(), "persons":umafall_persons, "window":10})
+models.append({"model_name":"arcma", "model":ARCMA_Model(), "persons":arcma_persons, "window":40})
 
 
 #tuple from MPL

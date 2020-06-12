@@ -40,33 +40,37 @@ for model in models:
     data = model['model'].load_training_data_by_people(model['person'], additional_where = model['where'])
     accuracy_mean = pd.DataFrame(columns=["Classifier", "Accuracy", "Precision", "Recall", "F-Score", "Time"])
     for w in range(10,110,10):
-        try:
-            print("Slicing Window....")
-            data_tsfresh, y = model['model'].slice_by_window_tsfresh(data, w)
-            y.index += 1
-            del data_tsfresh["activity"]
+        #try:
+        print("Slicing Window....")
+        data_tsfresh, y = model['model'].slice_by_window_tsfresh(data.copy(), w)
+        y.index += 1
+        del data_tsfresh["activity"]
+        
+        classes_counts = y.value_counts()
+        if len(classes_counts) > 1:
+            relevant_features = extract_relevant_features(data_tsfresh, y, column_id='id', column_sort='time')
+            y = pd.DataFrame(y, columns=[model['model'].label_tag])
             
-            classes_counts = y.value_counts()
-            if len(classes_counts) > 1:
-                relevant_features = extract_relevant_features(data_tsfresh, y, column_id='id', column_sort='time')
-                y = pd.DataFrame(y, columns=[model['model'].label_tag])
+            balanced_data = balance_data.balance_data(relevant_features, y, threshold_balance_data)
+            if isinstance(balanced_data, tuple):
                 
-                balanced_data = balance_data.balance_data(relevant_features, y, threshold_balance_data)
-                if isinstance(balanced_data, tuple):
-                    return_simple_accuracy = get_accuracy.get_accuracy_cross(classifier, balanced_data[0], balanced_data[1], n_to_split=5, threshold=0)
-                    accuracy = return_simple_accuracy["accuracy"]
-                    spent_time = return_simple_accuracy["spent_time"]
-                    precision = return_simple_accuracy['precision']
-                    recall = return_simple_accuracy['recall']
-                    f_score = return_simple_accuracy['f-scores']
-                    
-                    out_aux = pd.DataFrame({"Window": w, "Classifier":[type(classifier).__name__], "Accuracy":[accuracy], "Precision":[precision], "Recall":[recall], "F-Score":[f_score], "Time":[spent_time]})
-                    accuracy_mean = pd.concat([accuracy_mean, out_aux])
+                relevant_features.index = pd.RangeIndex(len(relevant_features.index))
+                y.index = pd.RangeIndex(len(y.index))
                 
-            del data_tsfresh
-            del y
-            del relevant_features
-        except Exception as e:
-            print(str(e))
+                return_simple_accuracy = get_accuracy.get_accuracy_cross(classifier, relevant_features, y, n_to_split=5, threshold=0)
+                accuracy = return_simple_accuracy["accuracy"]
+                spent_time = return_simple_accuracy["spent_time"]
+                precision = return_simple_accuracy['precision']
+                recall = return_simple_accuracy['recall']
+                f_score = return_simple_accuracy['f-scores']
+                
+                out_aux = pd.DataFrame({"Window": w, "Classifier":[type(classifier).__name__], "Accuracy":[accuracy], "Precision":[precision], "Recall":[recall], "F-Score":[f_score], "Time":[spent_time]})
+                accuracy_mean = pd.concat([accuracy_mean, out_aux])
+            
+        del data_tsfresh
+        del y
+        del relevant_features
+        #except Exception as e:
+        #    print(str(e))
     del data
     accuracy_mean.to_csv(s.path+"new_results{}{}_accuracy_by_window_{}.csv".format(slash, model['model_name'], type(classifier).__name__), sep='\t', encoding='utf-8')

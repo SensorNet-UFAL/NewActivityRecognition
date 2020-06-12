@@ -1,0 +1,6 @@
+======== Round 01 ===========
+	- Escolhido o metodo Extratrees por apresentar a melhor acurácia (janela padrão)
+	- Janelas Escolhidas:
+		* ARCMA = 40 => melhor acurácia, precisão e f-score
+		* HMP = 90 => melhor acurácia, precisão e f-score
+		* UMAFALL = 10 => melhor acurácia, precisão e f-score
